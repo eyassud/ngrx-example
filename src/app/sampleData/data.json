@@ -1,0 +1,105 @@
+{
+  "roles": [
+    {
+      "1": "Case Agent",
+      "2": "Co-Case Agent",
+      "3": "Administrator",
+      "4": "Approver"
+    }
+  ],
+  "organizations": [
+    {
+      "data": {
+        "id": 1,
+        "name": "FBI Headquarters"
+      },
+      "children": [
+        {
+          "data": {
+            "id": 2,
+            "name": "Baltimore"
+          },
+          "children": [
+            {
+              "data": {
+                "id": 3,
+                "name": "Baltimore Branch 1"
+              }
+            },
+            {
+              "data": {
+                "id": 4,
+                "name": "Baltimore Branch 2"
+              },
+              "children": [
+                {
+                  "data": {
+                    "id": 5,
+                    "name": "Baltimore Squad 1"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "lastName": "Smith",
+      "firstName": "John",
+      "middleInitial": "L",
+      "active": true,
+      "roles": [{
+        "orgId": 2,
+        "roleId": 1
+      }]
+    },
+    {
+      "id": 2,
+      "lastName": "Anderson",
+      "firstName": "Pamela",
+      "middleInitial": "L",
+      "active": true,
+      "roles": [{
+        "orgId": 5,
+        "roleId": 2
+      }]
+    },
+    {
+      "id": 3,
+      "lastName": "Walker",
+      "firstName": "James",
+      "middleInitial": "M",
+      "active": true,
+      "roles": [{
+        "orgId": 5,
+        "roleId": 1
+      }]
+    },
+    {
+      "id": 4,
+      "lastName": "Trump",
+      "firstName": "Donald",
+      "middleInitial": "J",
+      "active": true,
+      "roles": [{
+        "orgId": 3,
+        "roleId": 4
+      }]
+    },
+    {
+      "id": 5,
+      "lastName": "Admin",
+      "firstName": "HQ",
+      "middleInitial": "",
+      "active": true,
+      "roles": [{
+        "orgId": 1,
+        "roleId": 3
+      }]
+    }
+  ]
+}

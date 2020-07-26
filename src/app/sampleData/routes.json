@@ -1,0 +1,49 @@
+{
+  "/api/*": "/$1",
+  "/:organizations/:id/children": "/:organizations/:id/children",
+  "/posts/:category": "/posts?category=:category",
+  "/articles\\?id=:id": "/posts/:id"
+}
+"organizations": [
+  {
+    "id": 1,
+    "data": {
+      "id": 1,
+      "name": "FBI Headquarters"
+    },
+    "children": [
+      {
+        "id": 2,
+        "data": {
+          "id": 2,
+          "name": "Baltimore"
+        },
+        "children": [
+          {
+            "id": 3,
+            "data": {
+              "id": 3,
+              "name": "Baltimore Branch 1"
+            }
+          },
+          {
+            "id": 4,
+            "data": {
+              "id": 4,
+              "name": "Baltimore Branch 2"
+            },
+            "children": [
+              {
+                "id": 5,
+                "data": {
+                  "id": 5,
+                  "name": "Baltimore Squad 1"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+],

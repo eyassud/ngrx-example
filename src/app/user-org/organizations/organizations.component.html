@@ -1,0 +1,14 @@
+<p-treeTable [value]="organizations$ | async" [loading]="loading$ | async" selectionMode="single"
+  (onNodeSelect)="onNodeSelect($event)" dataKey="id">
+  <ng-template pTemplate="caption">
+    Organizations
+  </ng-template>
+  <ng-template pTemplate="body" let-rowNode let-rowData="rowData">
+    <tr [ttSelectableRow]="rowNode">
+      <td>
+        <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
+        {{ rowData.name }}
+      </td>
+    </tr>
+  </ng-template>
+</p-treeTable>
