@@ -1,8 +1,4 @@
-
-export interface IRole {
-  orgId: number;
-  roleId: number;
-}
+import { IRole } from './role.model';
 
 export interface IUser {
    id: number;

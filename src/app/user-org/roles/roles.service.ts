@@ -2,22 +2,23 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-import { IUser } from '../model/user.model';
+import { IRole } from '../model/role.model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class UsersService {
+export class RolesService {
   private usersUrl = 'http://localhost:3000/users';
+  private rolesUrl = 'http://localhost:3000/roles';
 
   constructor(private http: HttpClient) { }
 
-  getUsers(orgIds: number[]): Observable<IUser[]> {
-    return this.http.get<IUser[]>(this.usersUrl)
+  getRoles(orgIds: number[]): Observable<IRole[]> {
+    return this.http.get<IRole[]>(this.rolesUrl)
       .pipe(
-        map(users => users.filter(user => user.roles.find(role => orgIds.includes(role.orgId))),
-        catchError(error => throwError('getUsers failed'))
-      ));
+        map(roles => roles),
+        catchError(error => throwError('getRoles failed'))
+      );
   }
 
   private handleError(err) {

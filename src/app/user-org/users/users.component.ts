@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable, combineLatest, of, observable } from 'rxjs';
-import { IUser } from './model/userModel';
+import { IUser } from '../model/user.model';
 import * as fromUsers from './state';
 import * as userActions from './state/users.actions';
 import * as fromOrganizations from '../organizations/state';

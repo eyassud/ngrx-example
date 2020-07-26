@@ -1,5 +1,5 @@
 import { UsersActionTypes, UsersActions } from './users.actions';
-import { IUser } from '../model/userModel';
+import { IUser } from '../../model/user.model';
 
 export interface UsersState {
   users: IUser[];
