@@ -4,7 +4,8 @@ import { IUser } from '../../model/user.model';
 export enum UsersActionTypes {
   Load = '[Users] Load',
   LoadSuccess = '[Users] Load Success',
-  LoadFail = '[Users] Load Fail'
+  LoadFail = '[Users] Load Fail',
+  UserSelected = '[Users] User Selected'
 }
 
 export class Load implements Action {
@@ -25,9 +26,16 @@ export class LoadFail implements Action {
   constructor(public payload: string) { }
 }
 
+export class UserSelected implements Action {
+  readonly type = UsersActionTypes.UserSelected;
+
+  constructor(public payload: number) { }
+}
+
 // Union the valid types
 export type UsersActions = Load
   | LoadSuccess
-  | LoadFail;
+  | LoadFail
+  | UserSelected;
 
 

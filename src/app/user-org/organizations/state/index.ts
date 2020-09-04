@@ -6,27 +6,27 @@ export interface State extends fromRoot.State {
   organizations: fromOrganizations.OrganizationState;
 }
 
-const getOrganizationState = createFeatureSelector<
-  fromOrganizations.OrganizationState
->('organizations');
+// const getOrganizationState = createFeatureSelector<
+//   fromOrganizations.OrganizationState
+// >('organizations');
 
-export const getOrganization = createSelector(
-  getOrganizationState,
-  (state) => state.organizations
-);
+// export const getOrganization = createSelector(
+//   getOrganizationState,
+//   (state) => state.organizations
+// );
 
-export const getError = createSelector(
-  getOrganizationState,
-  (state) => state.error
-);
+// export const getError = createSelector(
+//   getOrganizationState,
+//   (state) => state.error
+// );
 
-export const getLoading = createSelector(
-  getOrganizationState,
-  (state) => state.loading
-);
+// export const getLoading = createSelector(
+//   getOrganizationState,
+//   (state) => state.loading
+// );
 
-export const getSelectedOrganizationIds = createSelector(
-  getOrganizationState,
-  (state) => state.selectedOrganizationIds
-);
+// export const getSelectedOrganizationIds = createSelector(
+//   getOrganizationState,
+//   (state) => state.selectedOrganizationIds
+// );
 

@@ -1,3 +1,4 @@
+
 <p-treeTable [value]="organizations$ | async" [loading]="loading$ | async" selectionMode="single"
   (onNodeSelect)="onNodeSelect($event)" dataKey="id">
   <ng-template pTemplate="caption">
@@ -12,3 +13,4 @@
     </tr>
   </ng-template>
 </p-treeTable>
+<div class="error">{{ errorMessage$ | async }}</div>

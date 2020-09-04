@@ -2,13 +2,12 @@
 
 /* NgRx */
 import { Action } from '@ngrx/store';
-import { TreeNode } from 'primeng/api';
+import { IRole } from '../../model/role.model';
 
 export enum RolesActionTypes {
-  Load = '[Users] Load',
-  LoadSuccess = '[Users] Load Success',
-  LoadFail = '[Users] Load Fail',
-  UserSelected = '[Users] Users Selected'
+  Load = '[Roles] Load',
+  LoadSuccess = '[Roles] Load Success',
+  LoadFail = '[Roles] Load Fail'
 }
 
 export class Load implements Action {
@@ -18,7 +17,7 @@ export class Load implements Action {
 export class LoadSuccess implements Action {
   readonly type = RolesActionTypes.LoadSuccess;
 
-  constructor(public payload: TreeNode[]) { }
+  constructor(public payload: IRole[]) { }
 }
 
 export class LoadFail implements Action {
@@ -27,16 +26,9 @@ export class LoadFail implements Action {
   constructor(public payload: string) { }
 }
 
-export class UserSelected implements Action {
-  readonly type = RolesActionTypes.UserSelected;
-
-  constructor(public payload: number[]) { }
-}
-
 // Union the valid types
 export type RolesActions = Load
   | LoadSuccess
-  | LoadFail
-  | UserSelected;
+  | LoadFail;
 
 

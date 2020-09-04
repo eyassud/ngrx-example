@@ -8,7 +8,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "jsonserver": "json-server --watch src/app/sampleData/data.json"
+    "jsonserver": "json-server --watch src/app/sampleData/data.json",
+    "example": "start npm run jsonserver && start ng serve"
   },
   "private": true,
   "dependencies": {
@@ -25,6 +26,8 @@
     "@ngrx/effects": "^9.2.0",
     "@ngrx/store": "^9.2.0",
     "@ngrx/store-devtools": "^9.2.0",
+    "@ngxs/logger-plugin": "^3.6.2-dev.master-eaa5d86",
+    "@ngxs/store": "^3.6.2-dev.master-eaa5d86",
     "angular-in-memory-web-api": "^0.11.0",
     "chart.js": "^2.9.3",
     "primeflex": "^1.1.1",

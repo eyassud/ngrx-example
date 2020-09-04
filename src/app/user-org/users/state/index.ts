@@ -23,4 +23,9 @@ export const getLoading = createSelector(
   (state) => state.loading
 );
 
+export const getSelectedUser = createSelector(
+  getUsersState,
+  (state) => state.users.find(u => u.id === state.selectedUsersId)
+);
+
 

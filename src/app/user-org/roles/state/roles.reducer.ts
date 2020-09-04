@@ -1,19 +1,19 @@
 import { RolesActionTypes, RolesActions } from './roles.actions';
-import { IUser } from '../model/userModel';
+import { IRole } from '../../model/role.model';
 
 export interface RolesState {
-  selectedUser: number | null;
+  roles: IRole[];
   loading: boolean;
   error: string;
 }
 
 const initialState: RolesState = {
-  selectedUser: null,
+  roles: [],
   loading: false,
   error: '',
 };
 
-export function reducerUsers(
+export function reducerRoles(
   state = initialState,
   action: RolesActions
 ): RolesState {
@@ -34,7 +34,7 @@ export function reducerUsers(
     case RolesActionTypes.LoadFail:
       return {
         ...state,
-        selectedUser: null,
+        roles: null,
         loading: false,
         error: action.payload,
       };

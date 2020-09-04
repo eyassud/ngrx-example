@@ -40,3 +40,27 @@ export type OrganizationActions = Load
   | OrgSelected;
 
 
+// tslint:disable-next-line:no-namespace
+export namespace OrganizationActions {
+
+  export class nLoad {
+    static readonly type = '[Organization] Load';
+  }
+
+  export class nLoadSuccess {
+    static readonly type = '[Organization] Load Success';
+    constructor(public payload: TreeNode[]) { }
+  }
+
+  export class nLoadFail {
+    static readonly type = '[Organization] Load Fail';
+
+    constructor(public payload: string) { }
+  }
+
+  export class nOrgSelected  {
+    static readonly type = '[Organization] Selected';
+
+    constructor(public payload: number[]) { }
+  }
+}

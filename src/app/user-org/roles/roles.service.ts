@@ -8,12 +8,11 @@ import { IRole } from '../model/role.model';
   providedIn: 'root'
 })
 export class RolesService {
-  private usersUrl = 'http://localhost:3000/users';
   private rolesUrl = 'http://localhost:3000/roles';
 
   constructor(private http: HttpClient) { }
 
-  getRoles(orgIds: number[]): Observable<IRole[]> {
+  getRoles(): Observable<IRole[]> {
     return this.http.get<IRole[]>(this.rolesUrl)
       .pipe(
         map(roles => roles),

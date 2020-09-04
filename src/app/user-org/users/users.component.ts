@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable, combineLatest, of, observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { IUser } from '../model/user.model';
 import * as fromUsers from './state';
 import * as userActions from './state/users.actions';
 import * as fromOrganizations from '../organizations/state';
-import { Store, select } from '@ngrx/store';
-import { filter, map, tap } from 'rxjs/operators';
-import { SortEvent } from 'primeng/api';
+//import { Store, select } from '@ngrx/store';
+import { filter, map } from 'rxjs/operators';
+import { Store } from '@ngxs/store';
 
 @Component({
   selector: 'app-users',
@@ -23,8 +23,9 @@ export class UsersComponent implements OnInit {
   selectedUser: any;
 
   constructor(
-    private userStore: Store<fromUsers.State>,
-    private organizationStore: Store<fromOrganizations.State>
+    // private userStore: Store<fromUsers.State>,
+    // private organizationStore: Store<fromOrganizations.State>,
+    private store: Store
   ) { }
 
   ngOnInit(): void {
@@ -35,25 +36,29 @@ export class UsersComponent implements OnInit {
       { field: 'active', header: 'Active' }
     ];
 
-    const orgId$ = this.organizationStore.pipe(
-      select(fromOrganizations.getSelectedOrganizationIds),
-      filter(ids => ids !== null),
-      map(ids => this.userStore.dispatch(new userActions.Load(ids))));
+    // const orgId$ = this.organizationStore.pipe(
+    //   select(fromOrganizations.getSelectedOrganizationIds),
+    //   filter(ids => ids !== null),
+    //   map(ids => this.userStore.dispatch(new userActions.Load(ids))));
 
-    const users$ = this.userStore.pipe(
+    // const users$ = this.userStore.pipe(
+    //   select(fromUsers.getUsers),
+    //   filter((item) => !!item),
+    //   map((users) => users)
+    // );
 
-      select(fromUsers.getUsers),
-      filter((item) => !!item),
-      map((users) => users)
-    );
+    // this.vm$ = combineLatest([orgId$, users$])
+    //   .pipe(
+    //     map(([orgId, users]) => [...users])
+    //   );
 
-    this.vm$ = combineLatest([orgId$, users$])
-      .pipe(
-        map(([orgId, users]) => [...users])
-      );
+    // this.errorMessage$ = this.userStore.pipe(select(fromUsers.getError));
 
-    this.errorMessage$ = this.userStore.pipe(select(fromUsers.getError));
+    // this.loading$ = this.userStore.pipe(select(fromUsers.getLoading));
 
-    this.loading$ = this.userStore.pipe(select(fromUsers.getLoading));
+  }
+
+  onRowSelect(event) {
+    //this.userStore.dispatch(new userActions.UserSelected(event.data.id));
   }
 }

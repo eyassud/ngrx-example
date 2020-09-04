@@ -9,7 +9,7 @@ export interface UsersState {
 }
 
 const initialState: UsersState = {
-  users: null,
+  users: [],
   selectedUsersId: null,
   loading: false,
   error: '',
@@ -40,6 +40,12 @@ export function reducerUsers(
         users: null,
         loading: false,
         error: action.payload,
+      };
+
+    case UsersActionTypes.UserSelected:
+      return {
+        ...state,
+        selectedUsersId: action.payload
       };
 
     default:

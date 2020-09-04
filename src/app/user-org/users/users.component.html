@@ -1,6 +1,6 @@
 
   <p-table [value]="vm$ | async" [loading]="loading$ | async" [columns]="cols" selectionMode="single"
-  dataKey="id" [(selection)]="selectedUser">
+  dataKey="id" [(selection)]="selectedUser"  (onRowSelect)="onRowSelect($event)">
     <ng-template pTemplate="caption">
       Users
     </ng-template>

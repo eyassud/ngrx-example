@@ -16,6 +16,9 @@ import { environment } from '../environments/environment';
 import { EffectsModule } from '@ngrx/effects';
 import { FormsModule } from '@angular/forms';
 
+import { NgxsModule } from '@ngxs/store';
+import { AppState } from './app.state';
+
 @NgModule({
   declarations: [
     AppComponent
@@ -33,7 +36,10 @@ import { FormsModule } from '@angular/forms';
       logOnly: environment.production,
     }),
     EffectsModule.forRoot([]),
-    UserOrgModule
+    UserOrgModule,
+    NgxsModule.forRoot([AppState], {
+      developmentMode: !environment.production
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]
