@@ -11,12 +11,12 @@ import { UserOrgModule } from './user-org/user-org.module';
 
 /* NgRx */
 import { StoreModule } from '@ngrx/store';
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
 import { EffectsModule } from '@ngrx/effects';
 import { FormsModule } from '@angular/forms';
 
 import { NgxsModule } from '@ngxs/store';
+import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { AppState } from './app.state';
 
 @NgModule({
@@ -30,16 +30,12 @@ import { AppState } from './app.state';
     HttpClientModule,
     FormsModule,
     StoreModule.forRoot({}),
-    StoreDevtoolsModule.instrument({
-      name: 'NGRX example App DevTools',
-      maxAge: 25,
-      logOnly: environment.production,
-    }),
     EffectsModule.forRoot([]),
     UserOrgModule,
     NgxsModule.forRoot([AppState], {
       developmentMode: !environment.production
     })
+    , NgxsReduxDevtoolsPluginModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]

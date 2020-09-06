@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable, combineLatest } from 'rxjs';
 import { IUser } from '../model/user.model';
-import * as fromUsers from './state';
-import * as userActions from './state/users.actions';
-import * as fromOrganizations from '../organizations/state';
-//import { Store, select } from '@ngrx/store';
-import { filter, map } from 'rxjs/operators';
-import { Store } from '@ngxs/store';
+import { Store, Select } from '@ngxs/store';
+import { UsersStateModel, USER_STATE_TOKEN } from './state/users.state';
+import * as UserActionTypes from './state/users.actions';
+import { map, filter } from 'rxjs/operators';
+import { OrganizationStateModel, ORGANIZATION_STATE_TOKEN } from '../organizations/state/organization.state';
 
 @Component({
   selector: 'app-users',
@@ -15,16 +14,16 @@ import { Store } from '@ngxs/store';
 })
 export class UsersComponent implements OnInit {
   cols: any[];
-  cols1: any[];
   errorMessage$: Observable<string>;
   loading$: Observable<boolean>;
   showGrid$: Observable<boolean>;
   vm$: Observable<IUser[]>;
   selectedUser: any;
 
+  @Select(USER_STATE_TOKEN) state$: Observable<UsersStateModel>;
+  @Select(ORGANIZATION_STATE_TOKEN) organizationState$: Observable<OrganizationStateModel>;
+
   constructor(
-    // private userStore: Store<fromUsers.State>,
-    // private organizationStore: Store<fromOrganizations.State>,
     private store: Store
   ) { }
 
@@ -36,26 +35,29 @@ export class UsersComponent implements OnInit {
       { field: 'active', header: 'Active' }
     ];
 
-    // const orgId$ = this.organizationStore.pipe(
-    //   select(fromOrganizations.getSelectedOrganizationIds),
-    //   filter(ids => ids !== null),
-    //   map(ids => this.userStore.dispatch(new userActions.Load(ids))));
+    this.loading$ = this.state$.pipe(
+      map(state => state.loading)
+    );
 
-    // const users$ = this.userStore.pipe(
-    //   select(fromUsers.getUsers),
-    //   filter((item) => !!item),
-    //   map((users) => users)
-    // );
+    this.errorMessage$ = this.state$.pipe(
+      map(state => state.error)
+    );
 
-    // this.vm$ = combineLatest([orgId$, users$])
-    //   .pipe(
-    //     map(([orgId, users]) => [...users])
-    //   );
+    const orgId$ = this.organizationState$.pipe(
+      map(state => state.selectedOrganizationIds),
+      filter(ids => ids !== null),
+      map((ids: number[]) => this.store.dispatch(new UserActionTypes.Load(ids))));
 
-    // this.errorMessage$ = this.userStore.pipe(select(fromUsers.getError));
+    const users$ = this.state$.pipe(
+      map(state => state.users),
+      filter((item) => !!item),
+      map((users) => users)
+    );
 
-    // this.loading$ = this.userStore.pipe(select(fromUsers.getLoading));
-
+    this.vm$ = combineLatest([orgId$, users$])
+      .pipe(
+        map(([orgId, users]) => [...users])
+      );
   }
 
   onRowSelect(event) {

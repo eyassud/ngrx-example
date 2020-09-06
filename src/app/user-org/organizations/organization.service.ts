@@ -32,7 +32,7 @@ export class OrganizationService {
       // The response body may contain clues as to what went wrong,
       errorMessage = `Backend returned code ${err.status}: ${err.statusText}`;
     }
-   // console.error(err);
+
     return throwError(errorMessage);
   }
 }

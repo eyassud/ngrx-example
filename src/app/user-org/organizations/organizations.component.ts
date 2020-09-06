@@ -1,17 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-
-import * as fromOrganization from './state';
-import * as organizationActions from './state/organization.actions';
-import * as fromUsers from '../users/state';
 import { Observable } from 'rxjs';
-
-import { Store, select } from '@ngrx/store';
 import { TreeNode } from 'primeng/api';
-import { map, filter, tap } from 'rxjs/operators';
+import { map, filter, catchError } from 'rxjs/operators';
 
-
-import { Store as nStore, Select } from '@ngxs/store';
-import { OrganizationActions } from './state/organization.actions';
+import { Store, Select } from '@ngxs/store';
+import { OrganizationStateModel, ORGANIZATION_STATE_TOKEN, OrganizationState } from './state/organization.state';
+import * as OrganizationActionTypes from './state/organization.actions';
 
 @Component({
   selector: 'app-organizations',
@@ -24,45 +18,40 @@ export class OrganizationsComponent implements OnInit {
   loading$: Observable<boolean>;
   appName$: Observable<string>;
 
+  @Select(ORGANIZATION_STATE_TOKEN) state$: Observable<OrganizationStateModel>;
+
   constructor(
-    private organizationStore: Store<fromOrganization.State>,
-    private store: nStore
+    private store: Store
   ) { }
 
   ngOnInit(): void {
-    // this.organizationStore.dispatch(new organizationActions.Load());
+    this.loading$ = this.state$.pipe(
+      map(state => state.loading)
+    );
 
-    // this.organizations$ = this.organizationStore.pipe(
-    //   select(fromOrganization.getOrganization),
-    //   filter((item) => !!item),
-    //   map((item) => this.recursive(item, []))
-    // );
+    this.errorMessage$ = this.state$.pipe(
+      map(state => state.error)
+    );
 
-    // this.errorMessage$ = this.organizationStore.pipe(
-    //   select(fromOrganization.getError)
-    // );
-
-    // this.loading$ = this.organizationStore
-    //   .pipe(select(fromOrganization.getLoading));
-
-    const x = this.store.select([ORGANIZATION_STATE_TOKEN]);
-
-    this.loading$ = this.store.select(state => state.Organization.loading);
-    this.errorMessage$ = this.store.select(state => state.Organization.error);
-    this.organizations$ = this.store.select(state => state.Organization.organizations)
+    this.organizations$ = this.state$
       .pipe(
-        tap(orgs => console.log(JSON.stringify(orgs))),
+        map(state => state.organizations),
         filter((item) => !!item),
         map((item) => this.recursive(item, []))
       );
 
-    this.store.dispatch(new OrganizationActions.nLoad());
+    this.store.dispatch(new OrganizationActionTypes.Load())
+      .pipe(
+        map(orgs => this.store.dispatch(new OrganizationActionTypes.LoadSuccess(orgs)))//,
+        // catchError(() => this.store.dispatch(
+        //   new OrganizationActionTypes.LoadFail('Failed to load organizations')))
+      );//.subscribe();
   }
 
   onNodeSelect(event) {
     const ids = [];
     this.findAllOrgIds(event.node, ids);
-    this.organizationStore.dispatch(new organizationActions.OrgSelected(ids));
+    this.store.dispatch(new OrganizationActionTypes.OrgSelected(ids));
   }
 
   private findAllOrgIds(node: TreeNode, ids: number[]) {
@@ -77,7 +66,8 @@ export class OrganizationsComponent implements OnInit {
     return ids;
   }
 
-  private recursive(organizations: any[], treeNodes: TreeNode[]): TreeNode[] {
+  private recursive(organizations: TreeNode[], treeNodes: TreeNode[]): TreeNode[] {
+
     for (const organization of organizations) {
       treeNodes.push({
         data: { ...organization.data },

@@ -10,7 +10,7 @@ import { AppState } from './app.state';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  title = 'ngrx-example1';
+  title = 'ngxs-example';
   @Select(AppState.getAppName) appName$: Observable<string>;
 
   constructor(private store: Store) { }
