@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { TreeNode } from 'primeng/api';
 import { map, filter, catchError } from 'rxjs/operators';
 
-import { Store, Select } from '@ngxs/store';
+import { Store, Select, Actions, ofActionErrored, ofActionSuccessful } from '@ngxs/store';
 import { OrganizationStateModel, ORGANIZATION_STATE_TOKEN, OrganizationState } from './state/organization.state';
 import * as OrganizationActionTypes from './state/organization.actions';
 
@@ -21,7 +21,7 @@ export class OrganizationsComponent implements OnInit {
   @Select(ORGANIZATION_STATE_TOKEN) state$: Observable<OrganizationStateModel>;
 
   constructor(
-    private store: Store
+    private store: Store, private actions$: Actions
   ) { }
 
   ngOnInit(): void {
@@ -30,8 +30,8 @@ export class OrganizationsComponent implements OnInit {
     );
 
     this.errorMessage$ = this.state$.pipe(
-      map(state => state.error)
-    );
+        map(state => state.error)
+      );
 
     this.organizations$ = this.state$
       .pipe(
@@ -40,18 +40,16 @@ export class OrganizationsComponent implements OnInit {
         map((item) => this.recursive(item, []))
       );
 
-    this.store.dispatch(new OrganizationActionTypes.Load())
-      .pipe(
-        map(orgs => this.store.dispatch(new OrganizationActionTypes.LoadSuccess(orgs)))//,
-        // catchError(() => this.store.dispatch(
-        //   new OrganizationActionTypes.LoadFail('Failed to load organizations')))
-      );//.subscribe();
+    this.store.dispatch(new OrganizationActionTypes.Load());
   }
 
   onNodeSelect(event) {
-    const ids = [];
-    this.findAllOrgIds(event.node, ids);
+    const ids = this.findAllOrgIds(event.node, []);
     this.store.dispatch(new OrganizationActionTypes.OrgSelected(ids));
+  }
+
+  onNodeExpand(event) {
+    this.store.dispatch(new OrganizationActionTypes.OrgExpanded(event.node.data.id));
   }
 
   private findAllOrgIds(node: TreeNode, ids: number[]) {
@@ -71,6 +69,7 @@ export class OrganizationsComponent implements OnInit {
     for (const organization of organizations) {
       treeNodes.push({
         data: { ...organization.data },
+        expanded: organization.expanded,
         children: organization.children
           ? this.recursive(organization.children, [])
           : undefined,

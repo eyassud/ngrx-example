@@ -33,9 +33,12 @@ import { AppState } from './app.state';
     EffectsModule.forRoot([]),
     UserOrgModule,
     NgxsModule.forRoot([AppState], {
-      developmentMode: !environment.production
-    })
-    , NgxsReduxDevtoolsPluginModule.forRoot()
+      developmentMode: !environment.production,
+      selectorOptions: {
+        suppressErrors: false
+      }
+    }),
+    NgxsReduxDevtoolsPluginModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]

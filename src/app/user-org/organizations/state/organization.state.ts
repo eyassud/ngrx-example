@@ -1,9 +1,10 @@
 import { TreeNode } from 'primeng/api';
-import { State, Action, StateContext, StateToken } from '@ngxs/store';
+import { State, Action, StateContext, StateToken, Selector } from '@ngxs/store';
 import { Injectable } from '@angular/core';
 import { OrganizationService } from '../organization.service';
-import { map, delay } from 'rxjs/operators';
+import { map, delay, mergeMap, tap, catchError } from 'rxjs/operators';
 import * as OrganizationActionTypes from './organization.actions';
+import { of, throwError } from 'rxjs';
 
 export interface OrganizationStateModel {
   organizations: TreeNode[];
@@ -30,48 +31,43 @@ export class OrganizationState {
   constructor(private organizationService: OrganizationService) {
   }
 
+  @Selector([ORGANIZATION_STATE_TOKEN])
+  static error(state: OrganizationStateModel) {
+    return state.error;
+  }
+
   @Action(OrganizationActionTypes.Load)
   load(ctx: StateContext<OrganizationStateModel>, action: OrganizationActionTypes.Load) {
-    const state = ctx.getState();
-    ctx.setState({
-      ...state,
-      loading: true
-    });
+
+    ctx.patchState({ loading: true });
 
     return this.organizationService.getOrganizations()
       .pipe(
         delay(200),
-        map(orgs => ctx.dispatch(new OrganizationActionTypes.LoadSuccess(orgs)))
-      );
+        tap(orgs =>
+          ctx.patchState({ organizations: orgs, loading: false})
+        ),
+        catchError(err => {
+          ctx.patchState({ loading: false, error: err });
+          return throwError(err);
+        }));
   }
 
-  @Action(OrganizationActionTypes.LoadSuccess)
-  loadSuccess(ctx: StateContext<OrganizationStateModel>, action: OrganizationActionTypes.LoadSuccess) {
-    const state = ctx.getState();
-    ctx.setState({
-      ...state,
-      organizations: action.payload,
-      loading: false,
-      error: '',
-    });
-  }
-
-  @Action(OrganizationActionTypes.LoadFail)
-  loadFail(ctx: StateContext<OrganizationStateModel>, action: OrganizationActionTypes.LoadFail) {
-    const state = ctx.getState();
-    ctx.setState({
-      ...state,
-      loading: false,
-      error: action.payload,
-    });
-  }
-
-  @Action(OrganizationActionTypes.OrgSelected)
+   @Action(OrganizationActionTypes.OrgSelected)
   organizationSelected(ctx: StateContext<OrganizationStateModel>, action: OrganizationActionTypes.OrgSelected) {
-    const state = ctx.getState();
-    ctx.setState({
-      ...state,
+    ctx.patchState({
       selectedOrganizationIds: action.payload
     });
+  }
+
+  private findOrgById(organizations: TreeNode[], id: number): TreeNode {
+    for (const organization of organizations) {
+      if (organization.data.id === id) {
+        return organization;
+      }
+      else if (organization.children) {
+        this.findOrgById(organization.children, id);
+      }
+    }
   }
 }
