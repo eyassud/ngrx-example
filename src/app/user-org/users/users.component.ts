@@ -20,7 +20,7 @@ export class UsersComponent implements OnInit {
   vm$: Observable<IUser[]>;
   selectedUser: any;
 
-  @Select(USER_STATE_TOKEN) state$: Observable<UsersStateModel>;
+  @Select(USER_STATE_TOKEN) usersState$: Observable<UsersStateModel>;
   @Select(ORGANIZATION_STATE_TOKEN) organizationState$: Observable<OrganizationStateModel>;
 
   constructor(
@@ -35,11 +35,11 @@ export class UsersComponent implements OnInit {
       { field: 'active', header: 'Active' }
     ];
 
-    this.loading$ = this.state$.pipe(
+    this.loading$ = this.usersState$.pipe(
       map(state => state.loading)
     );
 
-    this.errorMessage$ = this.state$.pipe(
+    this.errorMessage$ = this.usersState$.pipe(
       map(state => state.error)
     );
 
@@ -48,7 +48,7 @@ export class UsersComponent implements OnInit {
       filter(ids => ids !== null),
       map((ids: number[]) => this.store.dispatch(new UserActionTypes.Load(ids))));
 
-    const users$ = this.state$.pipe(
+    const users$ = this.usersState$.pipe(
       map(state => state.users),
       filter((item) => !!item),
       map((users) => users)
@@ -56,7 +56,7 @@ export class UsersComponent implements OnInit {
 
     this.vm$ = combineLatest([orgId$, users$])
       .pipe(
-        map(([orgId, users]) => [...users])
+        map(([_, users]) => [...users])
       );
   }
 

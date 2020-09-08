@@ -3,7 +3,8 @@ import { IUser } from '../../model/user.model';
 import { StateToken, State, Action, StateContext } from '@ngxs/store';
 import { Injectable } from '@angular/core';
 import { UsersService } from '../Users.service';
-import { map, delay } from 'rxjs/operators';
+import { map, delay, catchError } from 'rxjs/operators';
+import { throwError } from 'rxjs';
 
 export interface UsersStateModel {
   users: IUser[];
@@ -33,45 +34,21 @@ export class UsersState {
   @Action(UserActionTypes.Load)
   load(ctx: StateContext<UsersStateModel>, action: UserActionTypes.Load) {
     const state = ctx.getState();
-    ctx.setState({
-      ...state,
-      loading: true
-    });
+    ctx.patchState({ loading: true  });
 
     return this.usersService.getUsers(action.payload).pipe(
       delay(200),
-      map((users) => ctx.dispatch(new UserActionTypes.LoadSuccess(users)))
+      map(u => ctx.patchState({ users: u, loading: false})),
+      catchError(err => {
+        ctx.patchState({ loading: false, error: err});
+        return throwError(err);
+      })
     );
-  }
-
-  @Action(UserActionTypes.LoadSuccess)
-  loadSuccess(ctx: StateContext<UsersStateModel>, action: UserActionTypes.LoadSuccess) {
-    const state = ctx.getState();
-    ctx.setState({
-      ...state,
-      users: action.payload,
-      loading: false,
-      error: '',
-    });
-  }
-
-  @Action(UserActionTypes.LoadFail)
-  loadFail(ctx: StateContext<UsersStateModel>, action: UserActionTypes.LoadFail) {
-    const state = ctx.getState();
-    ctx.setState({
-      ...state,
-      loading: false,
-      error: action.payload,
-    });
   }
 
   @Action(UserActionTypes.UserSelected)
   organizationSelected(ctx: StateContext<UsersStateModel>, action: UserActionTypes.UserSelected) {
-    const state = ctx.getState();
-    ctx.setState({
-      ...state,
-      selectedUsersId: action.payload
-    });
+    ctx.patchState({ selectedUsersId: action.payload });
   }
 }
 

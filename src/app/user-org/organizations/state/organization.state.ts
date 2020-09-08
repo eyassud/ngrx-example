@@ -2,9 +2,10 @@ import { TreeNode } from 'primeng/api';
 import { State, Action, StateContext, StateToken, Selector } from '@ngxs/store';
 import { Injectable } from '@angular/core';
 import { OrganizationService } from '../organization.service';
-import { map, delay, mergeMap, tap, catchError } from 'rxjs/operators';
+import { map, delay, mergeMap, tap, catchError, filter } from 'rxjs/operators';
 import * as OrganizationActionTypes from './organization.actions';
 import { of, throwError } from 'rxjs';
+import { patch } from '@ngxs/store/operators';
 
 export interface OrganizationStateModel {
   organizations: TreeNode[];
@@ -31,33 +32,27 @@ export class OrganizationState {
   constructor(private organizationService: OrganizationService) {
   }
 
-  @Selector([ORGANIZATION_STATE_TOKEN])
-  static error(state: OrganizationStateModel) {
-    return state.error;
-  }
-
   @Action(OrganizationActionTypes.Load)
   load(ctx: StateContext<OrganizationStateModel>, action: OrganizationActionTypes.Load) {
-
     ctx.patchState({ loading: true });
 
     return this.organizationService.getOrganizations()
       .pipe(
         delay(200),
-        tap(orgs =>
-          ctx.patchState({ organizations: orgs, loading: false})
-        ),
+        filter((item) => !!item),
+        map(orgs => this.buildTreeNode(orgs, [])),
+        tap(orgs => {
+          ctx.patchState({ organizations: orgs, loading: false });
+        }),
         catchError(err => {
-          ctx.patchState({ loading: false, error: err });
+          ctx.patchState({ organizations: [], loading: false, error: err });
           return throwError(err);
         }));
   }
 
-   @Action(OrganizationActionTypes.OrgSelected)
+  @Action(OrganizationActionTypes.OrgSelected)
   organizationSelected(ctx: StateContext<OrganizationStateModel>, action: OrganizationActionTypes.OrgSelected) {
-    ctx.patchState({
-      selectedOrganizationIds: action.payload
-    });
+    ctx.patchState({ selectedOrganizationIds: action.payload });
   }
 
   private findOrgById(organizations: TreeNode[], id: number): TreeNode {
@@ -69,5 +64,19 @@ export class OrganizationState {
         this.findOrgById(organization.children, id);
       }
     }
+  }
+
+  private buildTreeNode(organizations: TreeNode[], treeNodes: TreeNode[]): TreeNode[] {
+
+    for (const organization of organizations) {
+      treeNodes.push({
+        data: { ...organization.data },
+        children: organization.children
+          ? this.buildTreeNode(organization.children, [])
+          : undefined,
+      } as TreeNode);
+    }
+
+    return treeNodes;
   }
 }
