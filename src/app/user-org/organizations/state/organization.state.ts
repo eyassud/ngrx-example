@@ -1,14 +1,13 @@
 import { TreeNode } from 'primeng/api';
-import { State, Action, StateContext, StateToken, Selector } from '@ngxs/store';
+import { State, Action, StateContext, StateToken } from '@ngxs/store';
 import { Injectable } from '@angular/core';
 import { OrganizationService } from '../organization.service';
-import { map, delay, mergeMap, tap, catchError, filter } from 'rxjs/operators';
+import { map, delay, catchError } from 'rxjs/operators';
 import * as OrganizationActionTypes from './organization.actions';
-import { of, throwError } from 'rxjs';
-import { patch } from '@ngxs/store/operators';
+import { throwError, asapScheduler } from 'rxjs';
 
 export interface OrganizationStateModel {
-  organizations: TreeNode[];
+  organizations: TreeNode;
   loading: boolean;
   selectedOrganizationIds: number[] | null;
   error: string;
@@ -33,50 +32,32 @@ export class OrganizationState {
   }
 
   @Action(OrganizationActionTypes.Load)
-  load(ctx: StateContext<OrganizationStateModel>, action: OrganizationActionTypes.Load) {
+  load(ctx: StateContext<OrganizationStateModel>) {
     ctx.patchState({ loading: true });
 
     return this.organizationService.getOrganizations()
       .pipe(
-        delay(200),
-        filter((item) => !!item),
-        map(orgs => this.buildTreeNode(orgs, [])),
-        tap(orgs => {
-          ctx.patchState({ organizations: orgs, loading: false });
+        map(orgs => {
+          asapScheduler.schedule(() => ctx.dispatch(new OrganizationActionTypes.LoadSuccess(orgs)));
         }),
-        catchError(err => {
-          ctx.patchState({ organizations: [], loading: false, error: err });
-          return throwError(err);
-        }));
+        catchError(() =>
+          throwError(asapScheduler.schedule(() => ctx.dispatch(
+            new OrganizationActionTypes.LoadFail('Failed to load organizations')))
+        )));
+  }
+
+  @Action(OrganizationActionTypes.LoadSuccess)
+  loadSuccess(ctx: StateContext<OrganizationStateModel>, action: OrganizationActionTypes.LoadSuccess) {
+    ctx.patchState({ loading: false, organizations: action.payload });
+  }
+
+  @Action(OrganizationActionTypes.LoadFail)
+  loadFail(ctx: StateContext<OrganizationStateModel>, action: OrganizationActionTypes.LoadFail) {
+    ctx.patchState({ loading: false, organizations: null, error: action.payload });
   }
 
   @Action(OrganizationActionTypes.OrgSelected)
   organizationSelected(ctx: StateContext<OrganizationStateModel>, action: OrganizationActionTypes.OrgSelected) {
     ctx.patchState({ selectedOrganizationIds: action.payload });
-  }
-
-  private findOrgById(organizations: TreeNode[], id: number): TreeNode {
-    for (const organization of organizations) {
-      if (organization.data.id === id) {
-        return organization;
-      }
-      else if (organization.children) {
-        this.findOrgById(organization.children, id);
-      }
-    }
-  }
-
-  private buildTreeNode(organizations: TreeNode[], treeNodes: TreeNode[]): TreeNode[] {
-
-    for (const organization of organizations) {
-      treeNodes.push({
-        data: { ...organization.data },
-        children: organization.children
-          ? this.buildTreeNode(organization.children, [])
-          : undefined,
-      } as TreeNode);
-    }
-
-    return treeNodes;
   }
 }

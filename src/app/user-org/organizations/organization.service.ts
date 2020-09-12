@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, delay } from 'rxjs/operators';
 import { TreeNode } from 'primeng/api';
 
 @Injectable({
@@ -13,9 +13,10 @@ export class OrganizationService {
 
   constructor(private http: HttpClient) { }
 
-  getOrganizations(): Observable<TreeNode[]> {
-    return this.http.get<TreeNode[]>(this.organizationsUrl)
+  getOrganizations(): Observable<TreeNode> {
+    return this.http.get<TreeNode>(this.organizationsUrl)
       .pipe(
+        delay(200),
         catchError(this.handleError)
       );
   }

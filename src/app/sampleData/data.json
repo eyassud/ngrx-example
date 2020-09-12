@@ -10,32 +10,32 @@
   "organizations": [
     {
       "data": {
-        "id": 1,
-        "name": "FBI Headquarters"
+        "key": 1,
+        "label": "Headquarters"
       },
       "children": [
         {
           "data": {
-            "id": 2,
-            "name": "Baltimore"
+            "key": 2,
+            "label": "Baltimore"
           },
           "children": [
             {
               "data": {
-                "id": 3,
-                "name": "Baltimore Branch 1"
+                "key": 3,
+                "label": "Baltimore Branch 1"
               }
             },
             {
               "data": {
-                "id": 4,
-                "name": "Baltimore Branch 2"
+                "key": 4,
+                "label": "Baltimore Branch 2"
               },
               "children": [
                 {
                   "data": {
-                    "id": 5,
-                    "name": "Baltimore Squad 1"
+                    "key": 5,
+                    "label": "Baltimore Squad 1"
                   }
                 }
               ]
@@ -47,7 +47,7 @@
   ],
   "users": [
     {
-      "id": 1,
+      "key": 1,
       "lastName": "Smith",
       "firstName": "John",
       "middleInitial": "L",
@@ -58,7 +58,7 @@
       }]
     },
     {
-      "id": 2,
+      "key": 2,
       "lastName": "Anderson",
       "firstName": "Pamela",
       "middleInitial": "L",
@@ -69,7 +69,7 @@
       }]
     },
     {
-      "id": 3,
+      "key": 3,
       "lastName": "Walker",
       "firstName": "James",
       "middleInitial": "M",
@@ -80,7 +80,7 @@
       }]
     },
     {
-      "id": 4,
+      "key": 4,
       "lastName": "Trump",
       "firstName": "Donald",
       "middleInitial": "J",
@@ -91,7 +91,7 @@
       }]
     },
     {
-      "id": 5,
+      "key": 5,
       "lastName": "Admin",
       "firstName": "HQ",
       "middleInitial": "",

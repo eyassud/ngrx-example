@@ -1,6 +1,6 @@
 
 <p-treeTable [value]="organizations$ | async" [loading]="loading$ | async" selectionMode="single"
-  (onNodeSelect)="onNodeSelect($event)" (onNodeExpand)="onNodeExpand($event)" dataKey="id" [(selection)]="selectedNode">
+  (onNodeSelect)="onNodeSelect($event)" dataKey="key" [(selection)]="selectedNode">
   <ng-template pTemplate="caption">
     Organizations
   </ng-template>
@@ -8,7 +8,7 @@
     <tr [ttRow]="rowNode" [ttSelectableRow]="rowNode">
       <td>
         <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
-        {{ rowData.name }}
+        {{ rowData.label }}
       </td>
     </tr>
   </ng-template>
