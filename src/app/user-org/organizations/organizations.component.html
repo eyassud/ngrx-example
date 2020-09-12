@@ -1,6 +1,6 @@
 
 <p-treeTable [value]="organizations$ | async" [loading]="loading$ | async" selectionMode="single"
-  (onNodeSelect)="onNodeSelect($event)" dataKey="key" [(selection)]="selectedNode">
+  (onNodeSelect)="onNodeSelect($event)" dataKey="key" [(selection)]="selectedNode" *ngIf="!(errorMessage$ | async)" >
   <ng-template pTemplate="caption">
     Organizations
   </ng-template>

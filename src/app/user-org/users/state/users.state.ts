@@ -3,8 +3,9 @@ import { IUser } from '../../model/user.model';
 import { StateToken, State, Action, StateContext } from '@ngxs/store';
 import { Injectable } from '@angular/core';
 import { UsersService } from '../Users.service';
-import { map, delay, catchError } from 'rxjs/operators';
-import { throwError } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
+import { asapScheduler, throwError } from 'rxjs';
+import { ErrorHandler } from 'src/app/shared/errorHandler';
 
 export interface UsersStateModel {
   users: IUser[];
@@ -33,17 +34,26 @@ export class UsersState {
 
   @Action(UserActionTypes.Load)
   load(ctx: StateContext<UsersStateModel>, action: UserActionTypes.Load) {
-    const state = ctx.getState();
-    ctx.patchState({ loading: true  });
+    ctx.patchState({ loading: true });
 
-    return this.usersService.getUsers(action.payload).pipe(
-      delay(200),
-      map(u => ctx.patchState({ users: u, loading: false})),
-      catchError(err => {
-        ctx.patchState({ loading: false, error: err});
-        return throwError(err);
-      })
-    );
+    return this.usersService.getUsers(action.payload)
+      .pipe(
+        map(users => asapScheduler.schedule(() =>
+          ctx.dispatch(new UserActionTypes.LoadSuccess(users)))),
+        catchError(() =>
+          throwError(asapScheduler.schedule(
+            () => ctx.dispatch(new UserActionTypes.LoadFail('Loading users failed')))
+          )));
+  }
+
+  @Action(UserActionTypes.LoadSuccess)
+  loadSuccess(ctx: StateContext<UsersStateModel>, action: UserActionTypes.LoadSuccess) {
+    ctx.patchState({ loading: false, users: action.payload });
+  }
+
+  @Action(UserActionTypes.LoadFail)
+  loadFail(ctx: StateContext<UsersStateModel>, action: UserActionTypes.LoadFail) {
+    ctx.patchState({ loading: false, users: [], error: action.payload });
   }
 
   @Action(UserActionTypes.UserSelected)

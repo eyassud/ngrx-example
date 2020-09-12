@@ -1,33 +1,32 @@
+<p-table [value]="vm$ | async" [loading]="loading$ | async" [columns]="cols" selectionMode="single" dataKey="key"
+  [(selection)]="selectedUser" (onRowSelect)="onRowSelect($event)" *ngIf="!(errorMessage$ | async)">
+  <ng-template pTemplate="caption">
+    Users
+  </ng-template>
+  <ng-template pTemplate="header" let-columns>
+    <tr>
+      <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+        {{col.header}}
+        <p-sortIcon [field]="col.field" ariaLabel="Activate to sort"
+          ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order">
+        </p-sortIcon>
+      </th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-rowData let-columns="columns">
+    <tr [pSelectableRow]="rowData">
+      <td *ngFor="let col of columns">
+        {{rowData[col.field]}}
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="emptymessage" let-columns>
+    <tr>
+      <td [attr.colspan]="columns.length">
+        No users found
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
 
-  <p-table [value]="vm$ | async" [loading]="loading$ | async" [columns]="cols" selectionMode="single"
-  dataKey="id" [(selection)]="selectedUser"  (onRowSelect)="onRowSelect($event)">
-    <ng-template pTemplate="caption">
-      Users
-    </ng-template>
-    <ng-template pTemplate="header" let-columns>
-      <tr>
-        <th *ngFor="let col of columns" [pSortableColumn]="col.field">
-          {{col.header}}
-          <p-sortIcon [field]="col.field" ariaLabel="Activate to sort"
-            ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order">
-          </p-sortIcon>
-        </th>
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-rowData let-columns="columns">
-      <tr [pSelectableRow]="rowData">
-        <td *ngFor="let col of columns">
-          {{rowData[col.field]}}
-        </td>
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="emptymessage" let-columns>
-      <tr>
-        <td [attr.colspan]="columns.length">
-          No users found
-        </td>
-      </tr>
-    </ng-template>
-  </p-table>
-
-<div *ngIf="(errorMessage$ | async)  as error"> {{ error }}</div>
+<div class="error" *ngIf="(errorMessage$ | async)  as error"> {{ error }}</div>

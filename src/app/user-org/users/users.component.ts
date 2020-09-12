@@ -46,7 +46,7 @@ export class UsersComponent implements OnInit {
     const orgId$ = this.organizationState$.pipe(
       map(state => state.selectedOrganizationIds),
       filter(ids => ids !== null),
-      map((ids: number[]) => this.store.dispatch(new UserActionTypes.Load(ids))));
+      map(ids => this.store.dispatch(new UserActionTypes.Load(ids))));
 
     const users$ = this.usersState$.pipe(
       map(state => state.users),
@@ -61,6 +61,6 @@ export class UsersComponent implements OnInit {
   }
 
   onRowSelect(event) {
-    //this.userStore.dispatch(new userActions.UserSelected(event.data.id));
+    this.store.dispatch(new UserActionTypes.UserSelected(event.data.id));
   }
 }
