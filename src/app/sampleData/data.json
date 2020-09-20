@@ -101,5 +101,8 @@
         "roleId": 3
       }]
     }
+  ],
+  "userOrgRole": [
+    { "key": 1, "userId": 1, "orgId": 2, "roleName": "Case Agent"}
   ]
 }

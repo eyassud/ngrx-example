@@ -6,6 +6,7 @@ import { map } from 'rxjs/operators';
 import { Store, Select } from '@ngxs/store';
 import { OrganizationStateModel, ORGANIZATION_STATE_TOKEN } from './state/organization.state';
 import * as OrganizationActionTypes from './state/organization.actions';
+import { OrganizationSelectors } from './state/organizations.selectors';
 
 @Component({
   selector: 'app-organizations',
@@ -14,31 +15,18 @@ import * as OrganizationActionTypes from './state/organization.actions';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OrganizationsComponent implements OnInit {
+  @Select(OrganizationSelectors.organizations)
   organizations$: Observable<TreeNode>;
+
+  @Select(OrganizationSelectors.error)
   errorMessage$: Observable<string>;
+
+  @Select(OrganizationSelectors.loading)
   loading$: Observable<boolean>;
-  appName$: Observable<string>;
-  selectedNode: TreeNode;
 
-  @Select(ORGANIZATION_STATE_TOKEN) organizationState$: Observable<OrganizationStateModel>;
-
-  constructor(
-    private store: Store  ) { }
+  constructor(private store: Store) { }
 
   ngOnInit(): void {
-    this.loading$ = this.organizationState$.pipe(
-      map(state => state.loading)
-    );
-
-    this.errorMessage$ = this.organizationState$.pipe(
-      map(state => state.error)
-    );
-
-    this.organizations$ = this.organizationState$
-      .pipe(
-        map(state => state.organizations)
-      );
-
     this.store.dispatch(new OrganizationActionTypes.Load());
   }
 

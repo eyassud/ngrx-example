@@ -1,7 +1,7 @@
 import { IRole } from './role.model';
 
 export interface IUser {
-   id: number;
+   key: number;
    lastName: string;
    firstName: string;
    middleInitial: string;

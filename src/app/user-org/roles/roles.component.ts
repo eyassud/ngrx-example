@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
-import { Store, select } from '@ngrx/store';
-//import * as fromUsers from '../users/state';
-import * as fromRoles from './state';
-import { map, filter } from 'rxjs/operators';
+import { Select, Store } from '@ngxs/store';
+import { Observable, of } from 'rxjs';
+import { filter, map, tap } from 'rxjs/operators';
 import { IRole } from '../model/role.model';
+import { UsersState, UsersStateModel, USERS_STATE_TOKEN } from '../users/state/users.state';
+import * as RolesActionTypes from './state/roles.actions';
+import { RolesState } from './state/roles.state';
 
 @Component({
   selector: 'app-roles',
@@ -13,24 +14,31 @@ import { IRole } from '../model/role.model';
 })
 export class RolesComponent implements OnInit {
   cols: any[];
+
+  @Select(RolesState.error)
   errorMessage$: Observable<string>;
+
+  @Select(RolesState.loading)
   loading$: Observable<boolean>;
+
+  @Select(UsersState.selectedUserRoles)
   vm$: Observable<IRole[]>;
 
-  // constructor(private userStore: Store<fromUsers.State>, private rolesStore: Store<fromRoles.State>) { }
+  @Select(USERS_STATE_TOKEN) usersState$: Observable<UsersStateModel>;
+
+  constructor(private store: Store) { }
 
   ngOnInit(): void {
-  }
-  // ngOnInit(): void {
-  //   this.cols = [
-  //     { field: 'roleId', header: 'RoleId' },
-  //     { field: 'orgId', header: 'OrgId' }
-  //   ];
+    this.cols = [
+      { field: 'key', header: 'Id', hidden: false },
+      { field: 'userId', header: 'UserId', hidden: true },
+      { field: 'orgId', header: 'OrgId', hidden: false },
+      { field: 'roleName', header: 'Role', hidden: true}
+    ];
 
-  //   this.vm$ = this.userStore.pipe(
-  //     select(fromUsers.getSelectedUser),
-  //     filter(user => Boolean(user)),
-  //     map((user) => user.roles)
-  //   );
-  //}
+    this.usersState$.pipe(
+      filter(state => Boolean(state.selectedUsersId)),
+      map(state => this.store.dispatch(new RolesActionTypes.Load(state.selectedUsersId)))
+    );
+  }
 }

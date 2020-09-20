@@ -1,11 +1,11 @@
 import * as UserActionTypes from './users.actions';
+import * as RolesActionTypes from '../../roles/state/roles.actions';
 import { IUser } from '../../model/user.model';
-import { StateToken, State, Action, StateContext } from '@ngxs/store';
+import { StateToken, State, Action, StateContext, Selector } from '@ngxs/store';
 import { Injectable } from '@angular/core';
 import { UsersService } from '../Users.service';
 import { map, catchError } from 'rxjs/operators';
 import { asapScheduler, throwError } from 'rxjs';
-import { ErrorHandler } from 'src/app/shared/errorHandler';
 
 export interface UsersStateModel {
   users: IUser[];
@@ -21,15 +21,29 @@ const initialState: UsersStateModel = {
   error: '',
 };
 
-export const USER_STATE_TOKEN = new StateToken<UsersStateModel>('users');
+export const USERS_STATE_TOKEN = new StateToken<UsersStateModel>('users');
 
 @State<UsersStateModel>({
-  name: USER_STATE_TOKEN,
+  name: USERS_STATE_TOKEN,
   defaults: initialState
 })
 @Injectable()
 export class UsersState {
   constructor(private usersService: UsersService) {
+  }
+
+  @Selector([USERS_STATE_TOKEN])
+  static selectedUserRoles(state: UsersStateModel) {
+    if (state.selectedUsersId) {
+      return state.users.find(u => u.key === state.selectedUsersId).roles;
+    }
+
+    return [];
+  }
+
+  @Selector([USERS_STATE_TOKEN])
+  static selectedUseId(state: UsersStateModel) {
+    return state.selectedUsersId;
   }
 
   @Action(UserActionTypes.Load)

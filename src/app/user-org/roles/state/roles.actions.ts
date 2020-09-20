@@ -1,7 +1,4 @@
 
-
-/* NgRx */
-import { Action } from '@ngrx/store';
 import { IRole } from '../../model/role.model';
 
 export enum RolesActionTypes {
@@ -10,25 +7,22 @@ export enum RolesActionTypes {
   LoadFail = '[Roles] Load Fail'
 }
 
-export class Load implements Action {
-  readonly type = RolesActionTypes.Load;
+export class Load {
+  static readonly type = RolesActionTypes.Load;
+  
+  constructor(public payload: number){}
 }
 
-export class LoadSuccess implements Action {
-  readonly type = RolesActionTypes.LoadSuccess;
+export class LoadSuccess {
+  static readonly type = RolesActionTypes.LoadSuccess;
 
   constructor(public payload: IRole[]) { }
 }
 
-export class LoadFail implements Action {
-  readonly type = RolesActionTypes.LoadFail;
+export class LoadFail {
+  static readonly type = RolesActionTypes.LoadFail;
 
   constructor(public payload: string) { }
 }
-
-// Union the valid types
-export type RolesActions = Load
-  | LoadSuccess
-  | LoadFail;
 
 

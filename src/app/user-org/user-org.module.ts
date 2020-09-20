@@ -4,16 +4,13 @@ import { UsersComponent } from './users/users.component';
 import { SourcesComponent } from './sources/sources.component';
 import { RolesComponent } from './roles/roles.component';
 import { OrganizationsComponent } from './organizations/organizations.component';
-import { StoreModule } from '@ngrx/store';
 import { TreeTableModule } from 'primeng/treetable';
 import { TableModule } from 'primeng/table';
-import { EffectsModule } from '@ngrx/effects';
 import { FormsModule } from '@angular/forms';
-import { reducerRoles } from './roles/state/roles.reducer';
-import { RolesEffects } from './roles/state/roles.effects';
 import { OrganizationState } from './organizations/state/organization.state';
 import { NgxsModule } from '@ngxs/store';
 import { UsersState } from './users/state/users.state';
+import { RolesState } from './roles/state/roles.state';
 
 @NgModule({
   declarations: [
@@ -25,10 +22,9 @@ import { UsersState } from './users/state/users.state';
   imports: [
     CommonModule,
     FormsModule,
-    TreeTableModule, TableModule,
-    StoreModule.forFeature('roles', reducerRoles),
-    EffectsModule.forFeature([RolesEffects]),
-    NgxsModule.forFeature([OrganizationState, UsersState])
+    TreeTableModule,
+    TableModule,
+    NgxsModule.forFeature([OrganizationState, UsersState, RolesState])
   ],
   exports: [
     SourcesComponent,

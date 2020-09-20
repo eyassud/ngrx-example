@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Observable, combineLatest } from 'rxjs';
 import { IUser } from '../model/user.model';
 import { Store, Select } from '@ngxs/store';
-import { UsersStateModel, USER_STATE_TOKEN } from './state/users.state';
+import { UsersStateModel, USERS_STATE_TOKEN } from './state/users.state';
 import * as UserActionTypes from './state/users.actions';
 import { map, filter } from 'rxjs/operators';
 import { OrganizationStateModel, ORGANIZATION_STATE_TOKEN } from '../organizations/state/organization.state';
@@ -20,7 +20,7 @@ export class UsersComponent implements OnInit {
   vm$: Observable<IUser[]>;
   selectedUser: any;
 
-  @Select(USER_STATE_TOKEN) usersState$: Observable<UsersStateModel>;
+  @Select(USERS_STATE_TOKEN) usersState$: Observable<UsersStateModel>;
   @Select(ORGANIZATION_STATE_TOKEN) organizationState$: Observable<OrganizationStateModel>;
 
   constructor(
@@ -61,6 +61,6 @@ export class UsersComponent implements OnInit {
   }
 
   onRowSelect(event) {
-    this.store.dispatch(new UserActionTypes.UserSelected(event.data.id));
+    this.store.dispatch(new UserActionTypes.UserSelected(event.data.key));
   }
 }

@@ -1,4 +1,4 @@
-<!-- <p-table [value]="(vm$ | async)" [loading]="loading$ | async" [columns]="cols" dataKey="id">
+<p-table [value]="(vm$ | async)" [loading]="loading$ | async" [columns]="cols" dataKey="key" *ngIf="(vm$ | async)">
   <ng-template pTemplate="caption">
     Roles
   </ng-template>
@@ -14,7 +14,7 @@
   </ng-template>
   <ng-template pTemplate="body" let-rowData let-columns="columns">
     <tr [pSelectableRow]="rowData">
-      <td *ngFor="let col of columns">
+      <td *ngFor="let col of columns" >
         {{rowData[col.field]}}
       </td>
     </tr>
@@ -28,4 +28,4 @@
   </ng-template>
 </p-table>
 
-<div *ngIf="(errorMessage$ | async)  as error"> {{ error }}</div> -->
+<div *ngIf="(errorMessage$ | async)  as error"> {{ error }}</div>

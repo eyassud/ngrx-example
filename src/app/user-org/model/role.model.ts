@@ -1,4 +1,6 @@
 export interface IRole {
+  key: number;
+  userId: number;
   orgId: number;
-  roleId: number;
+  roleName: string;
 }
