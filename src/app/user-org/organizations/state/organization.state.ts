@@ -49,7 +49,7 @@ export class OrganizationState {
 
   @Action(OrganizationActionTypes.LoadSuccess)
   loadSuccess(ctx: StateContext<OrganizationStateModel>, action: OrganizationActionTypes.LoadSuccess) {
-    ctx.patchState({ loading: false, organizations: action.payload });
+    ctx.patchState({ loading: false, organizations: Object.create(action.payload) });
   }
 
   @Action(OrganizationActionTypes.LoadFail)

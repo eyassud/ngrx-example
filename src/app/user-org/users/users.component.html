@@ -1,6 +1,6 @@
-<div class="menu" *ngIf="(buttons$ | async) as buttons">
-  <p-button label="Deactivate" style="margin-right: .25em;" [disabled]="buttons.deactivateDisabled"></p-button>
-  <p-button label="Add Role" style="margin-right: .25em;" [disabled]="buttons.addRoleDisabled"></p-button>
+<div class="menu" *ngIf="buttons$ | async as buttons">
+  <p-button label="Deactivate" [disabled]="buttons.deactivateDisabled" styleClass="menu-button"></p-button>
+  <p-button label="Add Role" [disabled]="buttons.addRoleDisabled"></p-button>
 </div>
 <p-table [value]="users$ | async" [loading]="loading$ | async" [columns]="cols" selectionMode="single" dataKey="key"
   (onRowSelect)="onRowSelect($event)" *ngIf="!(errorMessage$ | async)">

@@ -5,3 +5,7 @@
    margin-top:50px;
    text-align: center;
  }
+
+ body .ui-button {
+  margin-right: 0.25em;
+}

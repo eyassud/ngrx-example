@@ -33,7 +33,7 @@ import { AppState } from './state/app.state';
     EffectsModule.forRoot([]),
     UserOrgModule,
     NgxsModule.forRoot([AppState], {
-      //developmentMode: !environment.production,
+      developmentMode: !environment.production,
       selectorOptions: {
         suppressErrors: false
       }
