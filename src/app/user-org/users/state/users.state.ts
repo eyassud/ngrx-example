@@ -6,11 +6,16 @@ import { UsersService } from '../Users.service';
 import { map, catchError } from 'rxjs/operators';
 import { asapScheduler, throwError } from 'rxjs';
 
+export interface ButtonStates {
+    deactivateDisabled: boolean;
+    addRoleDisabled: boolean;
+}
 export interface UsersStateModel {
   users: IUser[];
   selectedUsersId: number | null;
   loading: boolean;
   error: string;
+  buttonStates: ButtonStates;
 }
 
 const initialState: UsersStateModel = {
@@ -18,6 +23,10 @@ const initialState: UsersStateModel = {
   selectedUsersId: null,
   loading: false,
   error: '',
+  buttonStates: {
+    deactivateDisabled: true,
+    addRoleDisabled: true
+  }
 };
 
 export const USERS_STATE_TOKEN = new StateToken<UsersStateModel>('users');
@@ -28,17 +37,7 @@ export const USERS_STATE_TOKEN = new StateToken<UsersStateModel>('users');
 })
 @Injectable()
 export class UsersState {
-  constructor(private usersService: UsersService) {
-  }
-
-  @Selector([USERS_STATE_TOKEN])
-  static selectedUserRoles(state: UsersStateModel) {
-    if (state.selectedUsersId) {
-      return state.users.find(u => u.key === state.selectedUsersId).roles;
-    }
-
-    return [];
-  }
+  constructor(private usersService: UsersService) { }
 
   @Action(UserActionTypes.Load)
   load(ctx: StateContext<UsersStateModel>, action: UserActionTypes.Load) {
@@ -66,7 +65,14 @@ export class UsersState {
 
   @Action(UserActionTypes.UserSelected)
   organizationSelected(ctx: StateContext<UsersStateModel>, action: UserActionTypes.UserSelected) {
-    ctx.patchState({ selectedUsersId: action.payload });
+    const user = ctx.getState().users.find(u => u.key === action.payload);
+    ctx.patchState({
+      selectedUsersId: action.payload,
+      buttonStates : {
+        deactivateDisabled : !user.active,
+        addRoleDisabled: !user.active
+      }
+    });
   }
 }
 

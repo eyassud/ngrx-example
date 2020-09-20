@@ -21,4 +21,9 @@ export class UsersSelectors {
   static getSelectedUsersId(state: UsersStateModel) {
     return state.selectedUsersId;
   }
+
+  @Selector([UsersState])
+  static getButtonStates(state: UsersStateModel) {
+    return state.buttonStates;
+  }
 }

@@ -62,7 +62,7 @@
       "lastName": "Anderson",
       "firstName": "Pamela",
       "middleInitial": "L",
-      "active": true,
+      "active": false,
       "roles": [{
         "orgId": 5,
         "roleId": 2
@@ -95,7 +95,7 @@
       "lastName": "Admin",
       "firstName": "HQ",
       "middleInitial": "",
-      "active": true,
+      "active": false,
       "roles": [{
         "orgId": 1,
         "roleId": 3

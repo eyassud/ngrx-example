@@ -27,6 +27,9 @@ export class UsersComponent implements OnInit {
   @Select(UsersSelectors.getUsers)
   users$: Observable<IUser[]>;
 
+  @Select(UsersSelectors.getButtonStates)
+  buttons$: Observable<any>;
+
   constructor(private store: Store) { }
 
   ngOnInit(): void {

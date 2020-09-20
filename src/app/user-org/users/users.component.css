@@ -5,3 +5,8 @@ td {
 .menu {
   margin-bottom: 5px;
 }
+
+.menu-button {
+  margin-right: 5px;
+  color: red
+}

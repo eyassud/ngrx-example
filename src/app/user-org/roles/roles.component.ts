@@ -21,7 +21,7 @@ export class RolesComponent implements OnInit {
   @Select(RolesState.loading)
   loading$: Observable<boolean>;
 
-  @Select(UsersState.selectedUserRoles)
+  @Select()
   vm$: Observable<IRole[]>;
 
   @Select(USERS_STATE_TOKEN) usersState$: Observable<UsersStateModel>;
