@@ -17,7 +17,7 @@ import { FormsModule } from '@angular/forms';
 
 import { NgxsModule } from '@ngxs/store';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
-import { AppState } from './app.state';
+import { AppState } from './state/app.state';
 
 @NgModule({
   declarations: [

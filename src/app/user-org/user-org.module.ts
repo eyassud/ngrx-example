@@ -6,11 +6,11 @@ import { RolesComponent } from './roles/roles.component';
 import { OrganizationsComponent } from './organizations/organizations.component';
 import { TreeTableModule } from 'primeng/treetable';
 import { TableModule } from 'primeng/table';
+import { ButtonModule } from 'primeng/button';
 import { FormsModule } from '@angular/forms';
 import { OrganizationState } from './organizations/state/organization.state';
 import { NgxsModule } from '@ngxs/store';
 import { UsersState } from './users/state/users.state';
-import { RolesState } from './roles/state/roles.state';
 
 @NgModule({
   declarations: [
@@ -24,7 +24,8 @@ import { RolesState } from './roles/state/roles.state';
     FormsModule,
     TreeTableModule,
     TableModule,
-    NgxsModule.forFeature([OrganizationState, UsersState, RolesState])
+    ButtonModule,
+    NgxsModule.forFeature([OrganizationState, UsersState])
   ],
   exports: [
     SourcesComponent,
@@ -33,4 +34,4 @@ import { RolesState } from './roles/state/roles.state';
     UsersComponent
   ],
 })
-export class UserOrgModule {}
+export class UserOrgModule { }

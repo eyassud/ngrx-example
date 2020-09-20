@@ -2,9 +2,10 @@ import { TreeNode } from 'primeng/api';
 import { State, Action, StateContext, StateToken } from '@ngxs/store';
 import { Injectable } from '@angular/core';
 import { OrganizationService } from '../organization.service';
-import { map, delay, catchError } from 'rxjs/operators';
+import { map, catchError } from 'rxjs/operators';
 import * as OrganizationActionTypes from './organization.actions';
 import { throwError, asapScheduler } from 'rxjs';
+import * as UserActionTypes from '../../users/state/users.actions';
 
 export interface OrganizationStateModel {
   organizations: TreeNode;
@@ -59,5 +60,6 @@ export class OrganizationState {
   @Action(OrganizationActionTypes.OrgSelected)
   organizationSelected(ctx: StateContext<OrganizationStateModel>, action: OrganizationActionTypes.OrgSelected) {
     ctx.patchState({ selectedOrganizationIds: action.payload });
+    ctx.dispatch(new UserActionTypes.Load(action.payload));
   }
 }

@@ -15,13 +15,13 @@ import { OrganizationSelectors } from './state/organizations.selectors';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OrganizationsComponent implements OnInit {
-  @Select(OrganizationSelectors.organizations)
+  @Select(OrganizationSelectors.getOrganizations)
   organizations$: Observable<TreeNode>;
 
-  @Select(OrganizationSelectors.error)
+  @Select(OrganizationSelectors.getError)
   errorMessage$: Observable<string>;
 
-  @Select(OrganizationSelectors.loading)
+  @Select(OrganizationSelectors.getLoading)
   loading$: Observable<boolean>;
 
   constructor(private store: Store) { }

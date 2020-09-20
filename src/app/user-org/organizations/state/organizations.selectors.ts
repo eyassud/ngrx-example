@@ -4,17 +4,22 @@ import { OrganizationState, OrganizationStateModel } from './organization.state'
 export class  OrganizationSelectors
 {
   @Selector([OrganizationState])
-  static loading(state: OrganizationStateModel) {
+  static getLoading(state: OrganizationStateModel) {
     return state.loading;
   }
 
   @Selector([OrganizationState])
-  static error(state: OrganizationStateModel) {
+  static getError(state: OrganizationStateModel) {
     return state.error;
   }
 
   @Selector([OrganizationState])
-  static organizations(state: OrganizationStateModel) {
+  static getOrganizations(state: OrganizationStateModel) {
     return state.organizations;
+  }
+
+  @Selector([OrganizationState])
+  static getSelectedOrganizationIds(state: OrganizationStateModel){
+    return state.selectedOrganizationIds;
   }
 }

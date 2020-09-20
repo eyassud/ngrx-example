@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Store, Select } from '@ngxs/store';
-import { AppActions } from './app.actions';
+import * as AppActionTypes from './state/app.actions';
 import { Observable } from 'rxjs';
-import { AppState } from './app.state';
+import { Title } from '@angular/platform-browser';
+import { AppSelectors } from './state/app.selectors';
 
 @Component({
   selector: 'app-root',
@@ -10,12 +11,14 @@ import { AppState } from './app.state';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  title = 'ngxs-example';
-  @Select(AppState.getAppName) appName$: Observable<string>;
 
-  constructor(private store: Store) { }
+  @Select(AppSelectors.getTitle) title$: Observable<string>;
+
+  constructor(private store: Store, private titleService: Title) { }
 
   ngOnInit(): void {
-    this.store.dispatch(new AppActions.SetName(this.title));
+    const title = 'NGXS';
+    this.store.dispatch(new AppActionTypes.LoggedIn(title, true));
+    this.titleService.setTitle(`${title}`);
   }
 }

@@ -17,7 +17,7 @@ export class OrganizationService {
   getOrganizations(): Observable<TreeNode> {
     return this.http.get<TreeNode>(this.organizationsUrl)
       .pipe(
-        delay(2000),
+        delay(200),
         catchError(error => this.errorHandler.handleError(error))
       );
   }

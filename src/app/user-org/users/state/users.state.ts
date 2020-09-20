@@ -1,5 +1,4 @@
 import * as UserActionTypes from './users.actions';
-import * as RolesActionTypes from '../../roles/state/roles.actions';
 import { IUser } from '../../model/user.model';
 import { StateToken, State, Action, StateContext, Selector } from '@ngxs/store';
 import { Injectable } from '@angular/core';
@@ -39,11 +38,6 @@ export class UsersState {
     }
 
     return [];
-  }
-
-  @Selector([USERS_STATE_TOKEN])
-  static selectedUseId(state: UsersStateModel) {
-    return state.selectedUsersId;
   }
 
   @Action(UserActionTypes.Load)
