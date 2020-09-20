@@ -65,12 +65,13 @@ export class UsersState {
 
   @Action(UserActionTypes.UserSelected)
   organizationSelected(ctx: StateContext<UsersStateModel>, action: UserActionTypes.UserSelected) {
-    const user = ctx.getState().users.find(u => u.key === action.payload);
+    const selectedUser = ctx.getState().users.find(u => u.key === action.payload);
+
     ctx.patchState({
       selectedUsersId: action.payload,
       buttonStates : {
-        deactivateDisabled : !user.active,
-        addRoleDisabled: !user.active
+        deactivateDisabled : !selectedUser.active,
+        addRoleDisabled: !selectedUser.active
       }
     });
   }

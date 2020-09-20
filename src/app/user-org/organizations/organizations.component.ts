@@ -1,10 +1,8 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Observable } from 'rxjs';
 import { TreeNode } from 'primeng/api';
-import { map } from 'rxjs/operators';
 
 import { Store, Select } from '@ngxs/store';
-import { OrganizationStateModel, ORGANIZATION_STATE_TOKEN } from './state/organization.state';
 import * as OrganizationActionTypes from './state/organization.actions';
 import { OrganizationSelectors } from './state/organizations.selectors';
 
