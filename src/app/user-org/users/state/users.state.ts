@@ -10,9 +10,11 @@ export interface ButtonStates {
   activateDisabled: boolean;
   deactivateDisabled: boolean;
   addRoleDisabled: boolean;
+  editUserDisabled: boolean;
 }
 export interface UsersStateModel {
   users: IUser[];
+  editUser: IUser;
   selectedUsersId: number | null;
   loading: boolean;
   error: string;
@@ -21,13 +23,15 @@ export interface UsersStateModel {
 
 const initialState: UsersStateModel = {
   users: [],
+  editUser: null,
   selectedUsersId: null,
   loading: false,
   error: '',
   buttonStates: {
     activateDisabled: true,
     deactivateDisabled: true,
-    addRoleDisabled: true
+    addRoleDisabled: true,
+    editUserDisabled: true
   }
 };
 
@@ -74,7 +78,8 @@ export class UsersState {
       buttonStates: {
         activateDisabled: selectedUser.active,
         deactivateDisabled: !selectedUser.active,
-        addRoleDisabled: !selectedUser.active
+        addRoleDisabled: !selectedUser.active,
+        editUserDisabled: !selectedUser.active
       }
     });
   }
@@ -82,15 +87,39 @@ export class UsersState {
   @Action(UserActionTypes.ActivateDeactivateUser)
   activateDeactivateUser(ctx: StateContext<UsersStateModel>) {
     const state = ctx.getState();
+    let selectedUser: IUser = null;
+
     const users = state.users.map(user => {
       if (user.key === state.selectedUsersId) {
         user.active = !user.active;
+        selectedUser = user;
       }
 
       return user;
     });
 
-    ctx.patchState({ users });
+    const buttonStates: ButtonStates = {
+      activateDisabled: selectedUser.active,
+      deactivateDisabled: !selectedUser.active,
+      addRoleDisabled: !selectedUser.active,
+      editUserDisabled: !selectedUser.active
+    };
+
+    ctx.patchState({ users, buttonStates });
+  }
+
+  @Action(UserActionTypes.EditUser)
+  editUser(ctx: StateContext<UsersStateModel>) {
+    const state = ctx.getState();
+
+    ctx.patchState({ editUser: state.users.find(user => user.key === state.selectedUsersId) });
+  }
+
+  @Action(UserActionTypes.CancelEditUser)
+  cancelEditUser(ctx: StateContext<UsersStateModel>) {
+    const state = ctx.getState();
+
+    ctx.patchState({ editUser: null });
   }
 }
 

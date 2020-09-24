@@ -48,61 +48,141 @@
   "users": [
     {
       "key": 1,
-      "lastName": "Smith",
-      "firstName": "John",
-      "middleInitial": "L",
+      "lastName": "Lee",
+      "firstName": "Hoi",
+      "middleInitial": "",
       "active": true,
-      "roles": [{
-        "orgId": 2,
-        "roleId": 1
-      }]
+      "roles": [
+        {
+          "orgId": 2,
+          "roleId": 1
+        }
+      ]
     },
     {
       "key": 2,
-      "lastName": "Anderson",
-      "firstName": "Pamela",
-      "middleInitial": "L",
+      "lastName": "Birzer",
+      "firstName": "Jason",
+      "middleInitial": "",
       "active": false,
-      "roles": [{
-        "orgId": 5,
-        "roleId": 2
-      }]
+      "roles": [
+        {
+          "orgId": 5,
+          "roleId": 2
+        }
+      ]
     },
     {
       "key": 3,
-      "lastName": "Walker",
-      "firstName": "James",
-      "middleInitial": "M",
+      "lastName": "Alemu",
+      "firstName": "Abraham",
+      "middleInitial": "",
       "active": true,
-      "roles": [{
-        "orgId": 5,
-        "roleId": 1
-      }]
+      "roles": [
+        {
+          "orgId": 5,
+          "roleId": 1
+        }
+      ]
     },
     {
       "key": 4,
-      "lastName": "Trump",
-      "firstName": "Donald",
-      "middleInitial": "J",
+      "lastName": "Matthews",
+      "firstName": "Kevin",
+      "middleInitial": "",
       "active": true,
-      "roles": [{
-        "orgId": 3,
-        "roleId": 4
-      }]
+      "roles": [
+        {
+          "orgId": 3,
+          "roleId": 4
+        }
+      ]
     },
     {
       "key": 5,
-      "lastName": "Admin",
-      "firstName": "HQ",
+      "lastName": "Todi",
+      "firstName": "Nawal",
       "middleInitial": "",
       "active": false,
-      "roles": [{
-        "orgId": 1,
-        "roleId": 3
-      }]
+      "roles": [
+        {
+          "orgId": 1,
+          "roleId": 3
+        }
+      ]
+    },
+    {
+      "key": 6,
+      "lastName": "Augustine",
+      "firstName": "Adam",
+      "middleInitial": "",
+      "active": false,
+      "roles": [
+        {
+          "orgId": 1,
+          "roleId": 3
+        }
+      ]
+    },
+    {
+      "key": 7,
+      "lastName": "Ko",
+      "firstName": "Albert",
+      "middleInitial": "",
+      "active": false,
+      "roles": [
+        {
+          "orgId": 4,
+          "roleId": 3
+        }
+      ]
+    },
+    {
+      "key": 8,
+      "lastName": "Morgan",
+      "firstName": "Thomas",
+      "middleInitial": "",
+      "active": false,
+      "roles": [
+        {
+          "orgId": 4,
+          "roleId": 3
+        }
+      ]
+    },
+    {
+      "key": 9,
+      "lastName": "Gill",
+      "firstName": "Harjinder",
+      "middleInitial": "",
+      "active": false,
+      "roles": [
+        {
+          "orgId": 4,
+          "roleId": 3
+        }
+      ]
+    },
+    {
+      "key": 10,
+      "lastName": "Witzel",
+      "firstName": "Lisa",
+      "middleInitial": "",
+      "active": false,
+      "roles": [
+        {
+          "orgId": 4,
+          "roleId": 3
+        }
+      ]
     }
   ],
   "userOrgRole": [
-    { "key": 1, "userId": 1, "orgId": 2, "roleName": "Case Agent"}
+    {
+      "key": 1,
+      "userId": 1,
+      "orgId": 2,
+      "roleName": "Case Agent"
+    }
   ]
 }

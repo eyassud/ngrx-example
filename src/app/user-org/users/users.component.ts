@@ -5,6 +5,7 @@ import { Store, Select } from '@ngxs/store';
 import * as UserActionTypes from './state/users.actions';
 import { UsersSelectors } from './state/users.selectors';
 import { OrganizationSelectors } from '../organizations/state/organizations.selectors';
+import { ButtonStates } from './state/users.state';
 
 @Component({
   selector: 'app-users',
@@ -28,7 +29,10 @@ export class UsersComponent implements OnInit {
   users$: Observable<IUser[]>;
 
   @Select(UsersSelectors.getButtonStates)
-  buttons$: Observable<any>;
+  buttons$: Observable<ButtonStates>;
+
+  @Select(UsersSelectors.getEditedUser)
+  editedUser$: Observable<IUser>;
 
   constructor(private store: Store) { }
 
@@ -41,11 +45,23 @@ export class UsersComponent implements OnInit {
     ];
   }
 
-  onRowSelect(event) {
+  onUserSelected(event) {
     this.store.dispatch(new UserActionTypes.UserSelected(event.data.key));
   }
 
-  activateDeactivate() {
+  onActivateDeactivate() {
     this.store.dispatch(new UserActionTypes.ActivateDeactivateUser());
+  }
+
+  onEditUser() {
+    this.store.dispatch(new UserActionTypes.EditUser());
+  }
+
+  onCancelEditUser() {
+    this.store.dispatch(new UserActionTypes.CancelEditUser());
+  }
+
+  onUpdateEditUser(user: IUser) {
+    // To Do
   }
 }

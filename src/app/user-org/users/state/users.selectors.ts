@@ -26,4 +26,9 @@ export class UsersSelectors {
   static getButtonStates(state: UsersStateModel) {
     return state.buttonStates;
   }
+
+  @Selector([UsersState])
+  static getEditedUser(state: UsersStateModel) {
+    return state.editUser;
+  }
 }

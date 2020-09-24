@@ -1,11 +1,13 @@
 <div class="menu" *ngIf="buttons$ | async as buttons">
-  <p-button label="Deactivate" [disabled]="buttons.deactivateDisabled" (onClick)="activateDeactivate()" styleClass="menu-button"></p-button>
-  <p-button label="Activate" [disabled]="buttons.activateDisabled" (onClick)="activateDeactivate()" styleClass="menu-button"></p-button>
+  <p-button label="Deactivate" [disabled]="buttons.deactivateDisabled" (onClick)="onActivateDeactivate()"
+    styleClass="menu-button"></p-button>
+  <p-button label="Activate" [disabled]="buttons.activateDisabled" (onClick)="onActivateDeactivate()"
+    styleClass="menu-button"></p-button>
   <p-button label="Add Role" [disabled]="buttons.addRoleDisabled"></p-button>
-  <p-button label="Edit" [disabled]="buttons.addRoleDisabled"></p-button>
+  <p-button label="Edit" [disabled]="buttons.editUserDisabled" (onClick)="onEditUser()"></p-button>
 </div>
 <p-table [value]="users$ | async" [loading]="loading$ | async" [columns]="cols" selectionMode="single" dataKey="key"
-  (onRowSelect)="onRowSelect($event)" *ngIf="!(errorMessage$ | async)">
+  (onRowSelect)="onUserSelected($event)" *ngIf="!(errorMessage$ | async)">
   <ng-template pTemplate="caption">
     Users
   </ng-template>
@@ -35,4 +37,30 @@
   </ng-template>
 </p-table>
 
-<div class="error" *ngIf="(errorMessage$ | async)  as error"> {{ error }}</div>
+<div class="error" *ngIf="(errorMessage$ | async) as error"> {{ error }}</div>
+
+<p-dialog header="Edit User" [visible]="(editedUser$ | async)" [modal]="true" [style]="{width: '50vw'}"
+  [baseZIndex]="10000" [draggable]="false" [resizable]="false" *ngIf="(editedUser$ | async) as userVM">
+  <table>
+    <tr>
+      <td>First</td>
+      <td><input type="text" pInputText [(ngModel)]="userVM.firstName" /></td>
+    </tr>
+    <tr>
+      <td>Last</td>
+      <td><input type="text" pInputText [(ngModel)]="userVM.lastName" /></td>
+    </tr>
+    <tr>
+      <td>Middle</td>
+      <td><input type="text" pInputText [(ngModel)]="userVM.middleInitial" /></td>
+    </tr>
+    <tr>
+      <td>Active</td>
+      <td>{{ userVM.active }}</td>
+    </tr>
+  </table>
+  <p-footer>
+    <button type="button" pButton icon="pi pi-check" label="Save" (click)="onUpdateEditUser(userVM)"></button>
+    <button type="button" pButton icon="pi pi-times" label="Cancel" class="ui-button-secondary" (click)="onCancelEditUser()"></button>
+  </p-footer>
+</p-dialog>
