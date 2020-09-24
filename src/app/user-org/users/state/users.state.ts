@@ -1,14 +1,15 @@
 import * as UserActionTypes from './users.actions';
 import { IUser } from '../../model/user.model';
-import { StateToken, State, Action, StateContext, Selector } from '@ngxs/store';
+import { StateToken, State, Action, StateContext } from '@ngxs/store';
 import { Injectable } from '@angular/core';
 import { UsersService } from '../Users.service';
 import { map, catchError } from 'rxjs/operators';
 import { asapScheduler, throwError } from 'rxjs';
 
 export interface ButtonStates {
-    deactivateDisabled: boolean;
-    addRoleDisabled: boolean;
+  activateDisabled: boolean;
+  deactivateDisabled: boolean;
+  addRoleDisabled: boolean;
 }
 export interface UsersStateModel {
   users: IUser[];
@@ -24,6 +25,7 @@ const initialState: UsersStateModel = {
   loading: false,
   error: '',
   buttonStates: {
+    activateDisabled: true,
     deactivateDisabled: true,
     addRoleDisabled: true
   }
@@ -69,11 +71,26 @@ export class UsersState {
 
     ctx.patchState({
       selectedUsersId: action.payload,
-      buttonStates : {
-        deactivateDisabled : !selectedUser.active,
+      buttonStates: {
+        activateDisabled: selectedUser.active,
+        deactivateDisabled: !selectedUser.active,
         addRoleDisabled: !selectedUser.active
       }
     });
+  }
+
+  @Action(UserActionTypes.ActivateDeactivateUser)
+  activateDeactivateUser(ctx: StateContext<UsersStateModel>) {
+    const state = ctx.getState();
+    const users = state.users.map(user => {
+      if (user.key === state.selectedUsersId) {
+        user.active = !user.active;
+      }
+
+      return user;
+    });
+
+    ctx.patchState({ users });
   }
 }
 

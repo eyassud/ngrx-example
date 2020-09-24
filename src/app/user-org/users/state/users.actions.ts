@@ -4,7 +4,8 @@ export enum UsersActionTypes {
   Load = '[Users] Load',
   LoadSuccess = '[Users] Load Successful',
   LoadFailed = '[Users] Load Failed',
-  UserSelected = '[Users] User Selected'
+  UserSelected = '[Users] User Selected',
+  ActivateDeactivateUser = '[Users] Activate/Deactivate User'
 }
 
 export class Load  {
@@ -26,6 +27,10 @@ export class UserSelected  {
   static readonly type = UsersActionTypes.UserSelected;
 
   constructor(public payload: number) { }
+}
+
+export class ActivateDeactivateUser  {
+  static readonly type = UsersActionTypes.ActivateDeactivateUser;
 }
 
 

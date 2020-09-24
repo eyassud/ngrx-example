@@ -14,10 +14,13 @@ import { OrganizationSelectors } from './state/organizations.selectors';
 })
 export class OrganizationsComponent implements OnInit {
   @Select(OrganizationSelectors.getOrganizations)
-  organizations$: Observable<TreeNode>;
+  organizations$: Observable<TreeNode[]>;
 
   @Select(OrganizationSelectors.getError)
   errorMessage$: Observable<string>;
+
+  @Select(OrganizationSelectors.getHasError)
+  hasError$: Observable<boolean>;
 
   @Select(OrganizationSelectors.getLoading)
   loading$: Observable<boolean>;
@@ -28,7 +31,7 @@ export class OrganizationsComponent implements OnInit {
     this.store.dispatch(new OrganizationActionTypes.Load());
   }
 
-  onNodeSelect(event) {
+  onOrganizationSelected(event) {
     const keys = this.findAllOrgKeys(event.node, []);
     this.store.dispatch(new OrganizationActionTypes.OrgSelected(keys));
   }

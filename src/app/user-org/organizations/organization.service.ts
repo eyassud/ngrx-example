@@ -14,8 +14,8 @@ export class OrganizationService {
 
   constructor(private http: HttpClient, private errorHandler: ErrorHandler) { }
 
-  getOrganizations(): Observable<TreeNode> {
-    return this.http.get<TreeNode>(this.organizationsUrl)
+  getOrganizations(): Observable<TreeNode[]> {
+    return this.http.get<TreeNode[]>(this.organizationsUrl)
       .pipe(
         delay(200),
         catchError(error => this.errorHandler.handleError(error))

@@ -8,10 +8,11 @@ import { throwError, asapScheduler } from 'rxjs';
 import * as UserActionTypes from '../../users/state/users.actions';
 
 export interface OrganizationStateModel {
-  organizations: TreeNode;
+  organizations: TreeNode[];
   loading: boolean;
   selectedOrganizationIds: number[] | null;
   error: string;
+  hasError: boolean;
 }
 
 const initialState: OrganizationStateModel = {
@@ -19,6 +20,7 @@ const initialState: OrganizationStateModel = {
   loading: false,
   selectedOrganizationIds: null,
   error: '',
+  hasError: false
 };
 
 export const ORGANIZATION_STATE_TOKEN = new StateToken<OrganizationStateModel>('organizations');
@@ -55,7 +57,7 @@ export class OrganizationState {
 
   @Action(OrganizationActionTypes.LoadFail)
   loadFail(ctx: StateContext<OrganizationStateModel>, action: OrganizationActionTypes.LoadFail) {
-    ctx.patchState({ loading: false, organizations: null, error: action.payload });
+    ctx.patchState({ loading: false, organizations: null, error: action.payload, hasError: true });
   }
 
   @Action(OrganizationActionTypes.OrgSelected)

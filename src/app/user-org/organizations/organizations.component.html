@@ -1,5 +1,5 @@
 <p-treeTable [value]="organizations$ | async" [loading]="loading$ | async" selectionMode="single"
-  (onNodeSelect)="onNodeSelect($event)" dataKey="key" *ngIf="!(errorMessage$ | async)">
+  (onNodeSelect)="onOrganizationSelected($event)" dataKey="key" *ngIf="!(hasError$ | async)">
   <ng-template pTemplate="caption">
     Organizations
   </ng-template>
@@ -12,4 +12,5 @@
     </tr>
   </ng-template>
 </p-treeTable>
-<div class="error">{{ errorMessage$ | async }}</div>
+<div *ngIf="hasError$ | async" class="error">{{ errorMessage$ | async }}</div>
+

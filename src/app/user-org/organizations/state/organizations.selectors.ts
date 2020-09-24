@@ -9,6 +9,11 @@ export class  OrganizationSelectors
   }
 
   @Selector([OrganizationState])
+  static getHasError(state: OrganizationStateModel) {
+    return state.hasError;
+  }
+
+  @Selector([OrganizationState])
   static getError(state: OrganizationStateModel) {
     return state.error;
   }

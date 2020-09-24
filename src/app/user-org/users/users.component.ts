@@ -45,7 +45,7 @@ export class UsersComponent implements OnInit {
     this.store.dispatch(new UserActionTypes.UserSelected(event.data.key));
   }
 
-  date() {
-    return Date.now();
+  activateDeactivate() {
+    this.store.dispatch(new UserActionTypes.ActivateDeactivateUser());
   }
 }

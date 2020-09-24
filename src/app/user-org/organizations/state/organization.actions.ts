@@ -15,7 +15,7 @@ export class Load {
 export class LoadSuccess  {
   static readonly type = OrganizationActionTypes.LoadSuccess;
 
-  constructor(public payload: TreeNode) { }
+  constructor(public payload: TreeNode[]) { }
 }
 
 export class LoadFail  {
