@@ -27,7 +27,6 @@ import { environment } from 'src/environments/environment';
     FormsModule,
     UserOrgModule,
     NgxsModule.forRoot([AppState], {
-      developmentMode: !environment.production,
       selectorOptions: {
         suppressErrors: false
       }

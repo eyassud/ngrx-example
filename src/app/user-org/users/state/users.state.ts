@@ -91,11 +91,12 @@ export class UsersState {
 
     const users = state.users.map(user => {
       if (user.key === state.selectedUsersId) {
-        user.active = !user.active;
-        selectedUser = user;
+        selectedUser = { ...user };
+        selectedUser.active = !user.active;
+        return selectedUser;
+      } else {
+        return user;
       }
-
-      return user;
     });
 
     const buttonStates: ButtonStates = {

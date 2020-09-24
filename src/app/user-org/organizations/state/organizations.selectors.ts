@@ -1,4 +1,5 @@
 import { Selector } from '@ngxs/store';
+import { TreeNode } from 'primeng/api';
 import { OrganizationState, OrganizationStateModel } from './organization.state';
 
 export class  OrganizationSelectors
