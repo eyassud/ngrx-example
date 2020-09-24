@@ -51,8 +51,8 @@ export class OrganizationState {
 
   @Action(OrganizationActionTypes.LoadSuccess)
   loadSuccess(ctx: StateContext<OrganizationStateModel>, action: OrganizationActionTypes.LoadSuccess) {
-    const copy = Object.create(action.payload) as TreeNode;
-    ctx.patchState({ loading: false, organizations: action.payload });
+    const copy = Object.create(action.payload) as TreeNode[];
+    ctx.patchState({ loading: false, organizations: copy });
   }
 
   @Action(OrganizationActionTypes.LoadFail)

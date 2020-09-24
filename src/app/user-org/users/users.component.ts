@@ -16,6 +16,7 @@ import { ButtonStates } from './state/users.state';
 export class UsersComponent implements OnInit {
   cols: any[];
 
+  //#region Selectors
   @Select(UsersSelectors.getError)
   errorMessage$: Observable<string>;
 
@@ -33,6 +34,7 @@ export class UsersComponent implements OnInit {
 
   @Select(UsersSelectors.getEditedUser)
   editedUser$: Observable<IUser>;
+  //#endregion
 
   constructor(private store: Store) { }
 
@@ -45,6 +47,7 @@ export class UsersComponent implements OnInit {
     ];
   }
 
+  //#region Event handlers
   onUserSelected(event) {
     this.store.dispatch(new UserActionTypes.UserSelected(event.data.key));
   }
@@ -64,4 +67,5 @@ export class UsersComponent implements OnInit {
   onUpdateEditUser(user: IUser) {
     // To Do
   }
+  //#endregion
 }
