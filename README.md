@@ -3,6 +3,11 @@
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.1.7.
 
 ## Development server
+Run `npm install -g json-server`
+
+Run `npm install`
+
+Run `json-server --watch src/app/sampleData/data.json`
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
