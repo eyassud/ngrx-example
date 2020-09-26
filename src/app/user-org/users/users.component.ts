@@ -65,7 +65,7 @@ export class UsersComponent implements OnInit {
   }
 
   onUpdateEditUser(user: IUser) {
-    // To Do
+    this.store.dispatch(new UserActionTypes.UpdateUser(user));
   }
   //#endregion
 }

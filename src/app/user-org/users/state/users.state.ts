@@ -122,5 +122,20 @@ export class UsersState {
 
     ctx.patchState({ editUser: null });
   }
+
+  @Action(UserActionTypes.UpdateUser)
+  updateUser(ctx: StateContext<UsersStateModel>, payload: UserActionTypes.UpdateUser) {
+    const state = ctx.getState();
+    const users = state.users.map(u => {
+      if (u.key === payload.user.key) {
+        return payload.user;
+      }
+      else {
+        return u;
+      }
+    });
+
+    ctx.patchState({ users, editUser: null });
+  }
 }
 
