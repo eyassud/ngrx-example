@@ -10,6 +10,7 @@ import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { OrganizationState } from './organizations/state/organization.state';
 import { NgxsModule } from '@ngxs/store';
 import { UsersState } from './users/state/users.state';
@@ -24,6 +25,7 @@ import { UsersState } from './users/state/users.state';
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     TreeTableModule,
     TableModule,
     ButtonModule,

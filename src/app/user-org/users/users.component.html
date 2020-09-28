@@ -39,28 +39,35 @@
 
 <div class="error" *ngIf="(errorMessage$ | async) as error"> {{ error }}</div>
 
-<p-dialog header="Edit User" [visible]="(editedUser$ | async)" [modal]="true" [style]="{width: '50vw'}"
-  [baseZIndex]="10000" [draggable]="false" [resizable]="false" *ngIf="(editedUser$ | async) as userVM">
-  <table>
-    <tr>
-      <td>First</td>
-      <td><input type="text" pInputText [(ngModel)]="userVM.firstName" /></td>
-    </tr>
-    <tr>
-      <td>Last</td>
-      <td><input type="text" pInputText [(ngModel)]="userVM.lastName" /></td>
-    </tr>
-    <tr>
-      <td>Middle</td>
-      <td><input type="text" pInputText [(ngModel)]="userVM.middleInitial" /></td>
-    </tr>
-    <tr>
-      <td>Active</td>
-      <td>{{ userVM.active }}</td>
-    </tr>
-  </table>
-  <p-footer>
-    <button type="button" pButton icon="pi pi-check" label="Save" (click)="onUpdateEditUser(userVM)"></button>
-    <button type="button" pButton icon="pi pi-times" label="Cancel" class="ui-button-secondary" (click)="onCancelEditUser()"></button>
-  </p-footer>
-</p-dialog>
+<form (ngSubmit)="onUpdateEditUser()" [formGroup]="userForm" novalidate>
+  <p-dialog header="Edit User" [visible]="(editedUser$ | async)" [modal]="true" [style]="{width: '50vw'}"
+    [baseZIndex]="10000" [draggable]="true" [resizable]="false" *ngIf="editedUser$ | async">
+
+    <table>
+      <tr>
+        <td>First</td>
+        <td><input type="text" pInputText formControlName="firstName" placeholder="First name is required" />
+          <span *ngIf="!userForm.controls.firstName.valid && userForm.controls.firstName.touched">Required</span></td>
+      </tr>
+      <tr>
+        <td>Last</td>
+        <td><input type="text" pInputText formControlName="lastName" placeholder="Last name is required" /></td>
+      </tr>
+      <tr>
+        <td>Middle</td>
+        <td><input type="text" pInputText formControlName="middleInitial" maxlength="1" /></td>
+      </tr>
+      <tr>
+        <td>Active</td>
+        <td><input type="checkbox" formControlName="active"></td>
+      </tr>
+    </table>
+
+    <p-footer>
+      <button type="submit" pButton icon="pi pi-check" label="Save" [disabled]="!userForm.valid"></button>
+      <button type="button" pButton icon="pi pi-times" label="Cancel" class="ui-button-secondary"
+        (click)="onCancelEditUser()"></button>
+    </p-footer>
+
+  </p-dialog>
+</form>

@@ -1,11 +1,13 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { IUser } from '../model/user.model';
+import { IUser, User } from '../model/user.model';
 import { Store, Select } from '@ngxs/store';
 import * as UserActionTypes from './state/users.actions';
 import { UsersSelectors } from './state/users.selectors';
 import { OrganizationSelectors } from '../organizations/state/organizations.selectors';
-import { ButtonStates } from './state/users.state';
+import { ButtonStates, USERS_STATE_TOKEN } from './state/users.state';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { filter, map, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-users',
@@ -32,11 +34,13 @@ export class UsersComponent implements OnInit {
   @Select(UsersSelectors.getButtonStates)
   buttons$: Observable<ButtonStates>;
 
-  @Select(UsersSelectors.getEditedUser)
   editedUser$: Observable<IUser>;
   //#endregion
 
-  constructor(private store: Store) { }
+  userForm: FormGroup;
+  user: IUser = new User();
+
+  constructor(private store: Store, private readonly fb: FormBuilder) { }
 
   ngOnInit(): void {
     this.cols = [
@@ -45,6 +49,25 @@ export class UsersComponent implements OnInit {
       { field: 'middleInitial', header: 'Middle' },
       { field: 'active', header: 'Active' }
     ];
+
+    this.userForm = this.fb.group({
+      key: '',
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      middleInitial: ['', Validators.required],
+      active: ''
+    });
+
+    this.editedUser$ = this.store.select(UsersSelectors.getEditedUser)
+      .pipe(
+        map(user => {
+          if (user) {
+            this.userForm.patchValue(user);
+          }
+
+          return user;
+        })
+      );
   }
 
   //#region Event handlers
@@ -64,8 +87,8 @@ export class UsersComponent implements OnInit {
     this.store.dispatch(new UserActionTypes.CancelEditUser());
   }
 
-  onUpdateEditUser(user: IUser) {
-    this.store.dispatch(new UserActionTypes.UpdateUser(user));
+  onUpdateEditUser() {
+    this.store.dispatch(new UserActionTypes.UpdateUser(this.userForm.value));
   }
   //#endregion
 }
