@@ -62,6 +62,6 @@ export class OrganizationState {
   @Action(OrganizationActionTypes.OrgSelected)
   organizationSelected(ctx: StateContext<OrganizationStateModel>, action: OrganizationActionTypes.OrgSelected) {
     ctx.patchState({ selectedOrganizationIds: action.payload });
-    ctx.dispatch(new UserActionTypes.Load(action.payload));
+    ctx.dispatch(new UserActionTypes.Load(action.payload, '0000001'));
   }
 }

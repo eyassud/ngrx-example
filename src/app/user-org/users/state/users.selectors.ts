@@ -1,11 +1,19 @@
-import { Selector } from '@ngxs/store';
+import { createSelector, Selector } from '@ngxs/store';
 import { UsersState, UsersStateModel } from './users.state';
 
 export class UsersSelectors {
   @Selector([UsersState])
-  static getLoading(state: UsersStateModel){
-    return state.loading;
+  static getLoading(state: UsersStateModel[], sourceNumber: string) {
+    return state.find(s => s.sourceNumber === sourceNumber).loading;
   }
+
+  static getLoading2(sourceNumber: string) {
+    return createSelector([UsersState], (state: UsersStateModel[]) =>
+    {
+      return state.find(s => s.sourceNumber === sourceNumber).loading;
+    });
+  }
+
 
   @Selector([UsersState])
   static getError(state: UsersStateModel) {

@@ -5,6 +5,7 @@ import { Injectable } from '@angular/core';
 import { UsersService } from '../Users.service';
 import { map, catchError } from 'rxjs/operators';
 import { asapScheduler, throwError } from 'rxjs';
+import { patch } from '@ngxs/store/operators';
 
 export interface ButtonStates {
   activateDisabled: boolean;
@@ -13,6 +14,7 @@ export interface ButtonStates {
   editUserDisabled: boolean;
 }
 export interface UsersStateModel {
+  sourceNumber: string;
   users: IUser[];
   editUser: IUser;
   selectedUsersId: number | null;
@@ -21,7 +23,9 @@ export interface UsersStateModel {
   buttonStates: ButtonStates;
 }
 
-const initialState: UsersStateModel = {
+const dummy: UsersStateModel =
+{
+  sourceNumber: '',
   users: [],
   editUser: null,
   selectedUsersId: null,
@@ -35,9 +39,11 @@ const initialState: UsersStateModel = {
   }
 };
 
+const initialState: UsersStateModel[] = [];
+
 export const USERS_STATE_TOKEN = new StateToken<UsersStateModel>('users');
 
-@State<UsersStateModel>({
+@State<UsersStateModel[]>({
   name: USERS_STATE_TOKEN,
   defaults: initialState
 })
@@ -46,13 +52,26 @@ export class UsersState {
   constructor(private usersService: UsersService) { }
 
   @Action(UserActionTypes.Load)
-  load(ctx: StateContext<UsersStateModel>, action: UserActionTypes.Load) {
-    ctx.patchState({ loading: true });
+  load(ctx: StateContext<UsersStateModel[]>, action: UserActionTypes.Load) {
+    const state = ctx.getState();
+    const sources = state.map(source => {
+      if (source.sourceNumber === action.sourceNumber) {
+        source.loading = true;
+        source.sourceNumber = action.sourceNumber;
+        return source;
+      } else {
+        return source;
+      }
+    });
+
+    ctx.setState(
+      sources
+    );
 
     return this.usersService.getUsers(action.payload)
       .pipe(
         map(users => asapScheduler.schedule(() =>
-          ctx.dispatch(new UserActionTypes.LoadSuccess(users)))),
+          ctx.dispatch(new UserActionTypes.LoadSuccess(users, action.sourceNumber)))),
         catchError(() =>
           throwError(asapScheduler.schedule(
             () => ctx.dispatch(new UserActionTypes.LoadFail('Loading users failed')))
@@ -60,8 +79,20 @@ export class UsersState {
   }
 
   @Action(UserActionTypes.LoadSuccess)
-  loadSuccess(ctx: StateContext<UsersStateModel>, action: UserActionTypes.LoadSuccess) {
-    ctx.patchState({ loading: false, users: action.payload });
+  loadSuccess(ctx: StateContext<UsersStateModel[]>, action: UserActionTypes.LoadSuccess) {
+    const state = ctx.getState();
+    // const sources = state.map(source => {
+    //   if (source.sourceNumber === action.sourceNumber) {
+    //     source.loading = true;
+    //     source.sourceNumber = action.sourceNumber;
+    //     return source;
+    //   } else {
+    //     return source;
+    //   }
+    // });
+    const result = { sourceNumber: action.sourceNumber, users: action.payload };
+
+    ctx.setState([ ...state, { ...dummy, ...result }]);
   }
 
   @Action(UserActionTypes.LoadFail)

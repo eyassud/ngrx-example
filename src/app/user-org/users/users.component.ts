@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { IUser, User } from '../model/user.model';
 import { Store, Select } from '@ngxs/store';
@@ -17,12 +17,13 @@ import { filter, map, tap } from 'rxjs/operators';
 })
 export class UsersComponent implements OnInit {
   cols: any[];
+  @Input() sourceNumber: string;
 
   //#region Selectors
   @Select(UsersSelectors.getError)
   errorMessage$: Observable<string>;
 
-  @Select(UsersSelectors.getLoading)
+  @Select(UsersSelectors.getLoading2('00000001'))
   loading$: Observable<boolean>;
 
   @Select(OrganizationSelectors.getSelectedOrganizationIds)

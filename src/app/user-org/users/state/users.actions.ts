@@ -14,13 +14,13 @@ export enum UsersActionTypes {
 export class Load {
   static readonly type = UsersActionTypes.Load;
 
-  constructor(public payload: number[]) { }
+  constructor(public payload: number[], public sourceNumber: string) { }
 }
 
 export class LoadSuccess {
   static readonly type = UsersActionTypes.LoadSuccess;
 
-  constructor(public payload: IUser[]) { }
+  constructor(public payload: IUser[], public sourceNumber: string) { }
 }
 
 export class LoadFail {
